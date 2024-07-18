@@ -2,19 +2,14 @@
     <v-app  class="background scrollable-section" >
         <v-main>
             <router-view/>
-            <HelloWorld />
-            <v-btn color="primary">Hello Vuetify</v-btn>
+            <v-btn color="primary">Hello vuetify</v-btn>
         </v-main>
     </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
 
 export default {
-    components: {
-        HelloWorld,
-    },
     mounted: function() {
         let elHtml = document.getElementsByTagName('html')[0]
         elHtml.style.overflowY = 'hidden'
