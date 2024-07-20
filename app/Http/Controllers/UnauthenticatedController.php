@@ -15,8 +15,10 @@ class UnauthenticatedController extends Controller
     {
         if (! $request->user()) {
             $data = [
+                'success' => false,
                 'server-status' => '401',
                 'message' => 'You\'re Unauthenticated. 😜',
+                'error' => 'Invalid token. Please provide a proper token.'
             ];
             return response()->json($data, 200);
         }
