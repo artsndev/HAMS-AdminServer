@@ -37,6 +37,35 @@ Route::middleware(['auth:admin-api', 'throttle:1000,1'])->group(function () {
 |--------------------------------------------------------------------------
 */
 
+use App\Http\Controllers\API\Doctor\Auth\LoginController as DoctorLoginController;
+use App\Http\Controllers\API\Doctor\Auth\RegisterController as DoctorRegisterController;
+use App\Http\Controllers\API\Doctor\DashboardController as DoctorDashboardController;
+
+// Doctor Login Route
+Route::controller(DoctorLoginController::class)->group(function () {
+    Route::post('/doctor/login', 'login');
+});
+
+// Doctor Register Route
+Route::controller(DoctorRegisterController::class)->group(function () {
+    Route::post('/doctor/register', 'register');
+});
+
+// Middleware Route API for Doctor.
+Route::middleware(['auth:doctor-api', 'throttle:1000,1'])->group(function () {
+    // Doctor Data Route
+    Route::controller(DoctorDashboardController::class)->group(function () {
+        Route::get('/doctor/data', 'auth');
+    });
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| API Routes for User
+|--------------------------------------------------------------------------
+*/
+
 use App\Http\Controllers\API\User\Auth\LoginController as UserLoginController;
 use App\Http\Controllers\API\User\Auth\RegisterController as UserRegisterController;
 use App\Http\Controllers\API\User\DashboardController as UserDashboardController;

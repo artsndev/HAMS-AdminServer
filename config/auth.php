@@ -54,6 +54,15 @@ return [
             'provider' => 'admins',
             'hash' => false,
         ],
+        'doctor' => [
+            'driver' => 'session',
+            'provider' => 'doctors',
+        ],
+        'doctor-api' => [
+            'driver' => 'jwt',
+            'provider' => 'doctors',
+            'hash' => false,
+        ],
     ],
 
     /*
