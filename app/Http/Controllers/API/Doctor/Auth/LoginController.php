@@ -46,14 +46,14 @@ class LoginController extends Controller
             }
             // Attempt to authenticate the user
             $credentials = $request->only('email', 'password');
-            if (!Auth::attempt($credentials)) {
+            if (!Auth::guard('doctor')->attempt($credentials)) {
                 $errors = [
                     'success' => false,
                     'message' => 'These credentials do not match our records.',
                 ];
                 return response()->json($errors, 200);
             }
-            $doctor = Auth::user();
+            $doctor = Auth::guard('doctor')->user();
             $doctorToken = JWTAuth::fromUser($doctor);
             $response = [
                 'success' => true,

@@ -23,7 +23,7 @@ Route::controller(AdminLoginController::class)->group(function () {
 });
 
 // Middleware Route API for Admin.
-Route::middleware(['auth:admin-api', 'throttle:1000,1'])->group(function () {
+Route::middleware(['auth:admin-api'])->group(function () {
     // Admin Data Route
     Route::controller(AdminDashboardController::class)->group(function () {
         Route::get('/admin/data', 'auth');
@@ -52,7 +52,7 @@ Route::controller(DoctorRegisterController::class)->group(function () {
 });
 
 // Middleware Route API for Doctor.
-Route::middleware(['auth:doctor-api', 'throttle:1000,1'])->group(function () {
+Route::middleware(['auth:doctor-api'])->group(function () {
     // Doctor Data Route
     Route::controller(DoctorDashboardController::class)->group(function () {
         Route::get('/doctor/data', 'auth');
@@ -81,7 +81,7 @@ Route::controller(UserRegisterController::class)->group(function () {
 });
 
 // Middleware Route API for User.
-Route::middleware(['auth:user-api', 'throttle:1000,1'])->group(function () {
+Route::middleware(['auth:user-api'])->group(function () {
     // User Data Route
     Route::controller(UserDashboardController::class)->group(function () {
         Route::get('/user/data', 'auth');
