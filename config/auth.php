@@ -92,6 +92,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
         ],
+
+        'doctors' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\doctor::class,
+        ],
     ],
 
     /*

@@ -13,13 +13,13 @@ use Illuminate\Support\Facades\Validator;
 class RegisterController extends Controller
 {
     /**
-     * Register new User.
+     * Register new Doctor.
      */
     public function register(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
-                'email' => 'required|unique:users|email',
+                'email' => 'required|unique:doctors|email',
                 'password' => 'required|min:8|confirmed',
             ]);
             if ($validator->fails()) {
@@ -39,8 +39,8 @@ class RegisterController extends Controller
             $response = [
                 'success' => true,
                 'data' => [
-                    'userToken' => $doctorToken,
-                    'user_info' => $doctor,
+                    'doctorToken' => $doctorToken,
+                    'doctor_info' => $doctor,
                 ],
                 'message' => "User registered successfully",
                 'mail_message' => 'Mail sent successfully',
