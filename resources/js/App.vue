@@ -2,7 +2,6 @@
     <v-app  class="background scrollable-section" >
         <v-main>
             <router-view/>
-            <v-btn color="primary">Hello vuetify</v-btn>
         </v-main>
     </v-app>
 </template>
@@ -22,6 +21,11 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+* {
+    font-family: 'Poppins', sans-serif;
+    background-color: #CFD8DC;
+}
 .status-bar {
     background-color: transparent !important;
 }

@@ -16,6 +16,7 @@ Route::controller(UnauthenticatedController::class)->group(function () {
 
 use App\Http\Controllers\API\Admin\Auth\LoginController as AdminLoginController;
 use App\Http\Controllers\API\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\API\Admin\Auth\LogoutController as AdminLogoutController;
 
 // Admin Login Route
 Route::controller(AdminLoginController::class)->group(function () {
@@ -27,6 +28,10 @@ Route::middleware(['auth:admin-api'])->group(function () {
     // Admin Data Route
     Route::controller(AdminDashboardController::class)->group(function () {
         Route::get('/admin/data', 'auth');
+    });
+    // Logout Route
+    Route::controller(AdminLogoutController::class)->group(function () {
+        Route::post('/admin/logout', 'logout');
     });
 });
 

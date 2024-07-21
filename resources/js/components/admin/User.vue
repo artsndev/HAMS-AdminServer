@@ -1,7 +1,7 @@
 <template>
     <Appbar/>
     <v-container>
-        <h1>Hello I'm an Admin Home Page</h1>
+        <h1>Hello I'm an Admin User Page</h1>
     </v-container>
 </template>
 
