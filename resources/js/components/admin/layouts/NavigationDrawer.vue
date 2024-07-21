@@ -6,7 +6,7 @@
                 <p class="text-grey mb-2 fs-14"> All rights reserved.</p>
             </div>
         </template>
-        <v-list density="compact" nav :color="$vuetify.theme.dark ? 'blue-darken-3' : 'red-lighten-1'" class="mt-5">
+        <v-list density="compact" nav :color="$vuetify.theme.dark ? 'blue-darken-3' : 'blue-lighten-1'" class="mt-5">
             <v-list-subheader class="text-uppercase font-weight-black text-caption" :class="!$vuetify.theme.dark ? 'text-white' : 'text-white'">Menu</v-list-subheader>
             <v-list-item v-for="(item, i) in items" :key="i" :value="item" class="fs-5" :class="{'active': isRouteActive(item.routeName)}">
                 <template v-slot:prepend>
@@ -26,10 +26,10 @@
 import { ref } from 'vue';
 
 const items = ref([
-    { icon: 'mdi-chart-donut', text: 'Dashboard', },
-    { icon: 'mdi-clipboard-text-multiple-outline', text: 'Appointments',},
-    { icon: 'mdi-doctor', text: 'Doctors',},
-    { icon: 'mdi-account-multiple-outline', text: 'Users',},
+    { icon: 'mdi-chart-donut', text: 'Dashboard', routeName: 'Admin Dashboard' },
+    { icon: 'mdi-clipboard-text-multiple-outline', text: 'Appointments', routeName: 'Admin Appointment'},
+    { icon: 'mdi-doctor', text: 'Doctors', routeName: 'Admin Doctor'},
+    { icon: 'mdi-account-multiple-outline', text: 'Users', routeName: 'Admin User'},
 ]);
 const isRouteActive = (routeName) => {
     // return routeName === $route.name;
