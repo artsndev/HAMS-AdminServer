@@ -26,7 +26,7 @@
 import { ref } from 'vue';
 import NavigationDrawer from './NavigationDrawer.vue';
 
-const drawer = ref(false);
+const drawer = ref(true);
 const dark = ref(true);
 const themeAnimating = ref(true);
 

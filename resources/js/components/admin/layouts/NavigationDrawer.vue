@@ -24,6 +24,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const items = ref([
     { icon: 'mdi-chart-donut', text: 'Dashboard', routeName: 'Admin Dashboard' },
@@ -31,12 +32,25 @@ const items = ref([
     { icon: 'mdi-doctor', text: 'Doctors', routeName: 'Admin Doctor'},
     { icon: 'mdi-account-multiple-outline', text: 'Users', routeName: 'Admin User'},
 ]);
+
+const router = useRouter();
 const isRouteActive = (routeName) => {
-    // return routeName === $route.name;
+    return routeName === router.currentRoute.value.name;
 };
 
-const logout = () => {
-    // Implement logout functionality here
+const logout = async () => {
+    try {
+        const token = localStorage.getItem('adminToken');
+        await axios.post('/api/admin/logout', null, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+        localStorage.removeItem('adminToken');
+        router.push({ name: 'Admin Login' });
+    } catch (error) {
+        console.error(error);
+    }
 };
 </script>
 
