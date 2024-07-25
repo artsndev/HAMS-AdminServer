@@ -22,22 +22,34 @@ const routes = [
     {
         path: '/admin/dashboard',
         name: 'Admin Dashboard',
-        component: () => import('../components/admin/Dashboard.vue')
+        component: () => import('../components/admin/Dashboard.vue'),
+        meta: {
+            requiresAdminAuth: true,
+        }
     },
     {
         path: '/admin/appointments',
         name: 'Admin Appointment',
-        component: () => import('../components/admin/Appointment.vue')
+        component: () => import('../components/admin/Appointment.vue'),
+        meta: {
+            requiresAdminAuth: true,
+        }
     },
     {
         path: '/admin/doctors',
         name: 'Admin Doctor',
-        component: () => import('../components/admin/Doctor.vue')
+        component: () => import('../components/admin/Doctor.vue'),
+        meta: {
+            requiresAdminAuth: true,
+        }
     },
     {
         path: '/admin/users',
         name: 'Admin User',
-        component: () => import('../components/admin/User.vue')
+        component: () => import('../components/admin/User.vue'),
+        meta: {
+            requiresAdminAuth: true,
+        }
     },
 
 ]
