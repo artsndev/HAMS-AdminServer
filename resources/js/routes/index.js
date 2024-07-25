@@ -55,6 +55,12 @@ const routes = [
         }
     },
 
+    // Doctor Web Routes
+    {
+        path: '/doctor/login',
+        name: 'Doctor Login',
+        component: () => import('../components/doctor/auth/Login.vue')
+    }
 ]
 
 const router = createRouter({
@@ -71,6 +77,20 @@ router.beforeEach((to, from, next) => {
         next({ name: 'Admin Login' });
     } else if (admin && isAdminLoggedIn) {
         next({ name: 'Admin Dashboard' });
+    } else {
+        next();
+    }
+});
+
+// Doctor Auth Middleware
+router.beforeEach((to, from, next) => {
+    const requiresDoctorAuth = to.matched.some(record => record.meta.requiresDoctorAuth);
+    const doctor = to.matched.some(record => record.meta.doctor);
+    const isDoctorLoggedIn = localStorage.getItem('doctorToken');
+    if (requiresDoctorAuth && !isDoctorLoggedIn) {
+        next({ name: 'Doctor Login' });
+    } else if (doctor && isDoctorLoggedIn) {
+        next({ name: 'Doctor Dashboard' });
     } else {
         next();
     }
