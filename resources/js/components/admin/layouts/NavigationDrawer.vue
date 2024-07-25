@@ -2,7 +2,7 @@
     <v-navigation-drawer dark border="0" :dark="$vuetify.theme.dark" :color="$vuetify.theme.dark ? 'blue-grey-darken-3' : 'blue-darken-4'" active>
         <template v-slot:append>
             <div class="text-center">
-                <p class="text-grey fs-14">© 2024 Wanna Be .I.T.'s</p>
+                <p class="text-grey fs-14">© 2024 QuirkyQuarks Squadrons</p>
                 <p class="text-grey mb-2 fs-14"> All rights reserved.</p>
             </div>
         </template>
