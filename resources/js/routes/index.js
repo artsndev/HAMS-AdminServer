@@ -70,9 +70,9 @@ const routes = [
         path: '/doctor/dashboard',
         name: 'Doctor Dashboard',
         component: () => import('../components/doctor/Dashboard.vue'),
-        // meta: {
-        //     requiresAdminAuth: true,
-        // }
+        meta: {
+            requiresDoctorAuth: true,
+        }
     },
 ]
 
