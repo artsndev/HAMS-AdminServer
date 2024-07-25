@@ -17,7 +17,10 @@ const routes = [
     {
         path: '/admin/login',
         name: 'Admin Login',
-        component: () => import('../components/admin/auth/Login.vue')
+        component: () => import('../components/admin/auth/Login.vue'),
+        meta: {
+            admin: true
+        }
     },
     {
         path: '/admin/dashboard',
