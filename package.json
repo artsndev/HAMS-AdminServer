@@ -16,6 +16,7 @@
         "vue": "^3.2.37"
     },
     "dependencies": {
+        "@coders-tm/vue-number-format": "^3.34.1",
         "vue-loader": "^17.4.2",
         "vue-router": "^4.4.0",
         "vuetify": "^3.6.13"

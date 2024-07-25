@@ -29,6 +29,7 @@ import { useRouter } from 'vue-router';
 const items = ref([
     { icon: 'mdi-chart-donut', text: 'Dashboard', routeName: 'Doctor Dashboard' },
     { icon: 'mdi-clipboard-text-multiple-outline', text: 'Appointments', routeName: 'Admin Appointment'},
+    { icon: 'mdi-account-multiple-outline', text: 'Patients', routeName: 'Admin User'},
 ]);
 
 const router = useRouter();
