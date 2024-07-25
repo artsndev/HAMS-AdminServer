@@ -60,7 +60,15 @@ const routes = [
         path: '/doctor/login',
         name: 'Doctor Login',
         component: () => import('../components/doctor/auth/Login.vue')
-    }
+    },
+    {
+        path: '/doctor/dashboard',
+        name: 'Doctor Dashboard',
+        component: () => import('../components/doctor/Dashboard.vue'),
+        // meta: {
+        //     requiresAdminAuth: true,
+        // }
+    },
 ]
 
 const router = createRouter({

@@ -17,7 +17,7 @@ class LogoutController extends Controller
     public function logout()
     {
         Session::flush();
-        Auth::logout();
+        Auth::guard('doctor')->logout();
         return response()->json(['message' => 'Admin successfully signed out'], 200);
     }
 }

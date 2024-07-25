@@ -45,12 +45,12 @@ Route::middleware(['auth:admin-api'])->group(function () {
 use App\Http\Controllers\API\Doctor\Auth\LoginController as DoctorLoginController;
 use App\Http\Controllers\API\Doctor\Auth\RegisterController as DoctorRegisterController;
 use App\Http\Controllers\API\Doctor\DashboardController as DoctorDashboardController;
+use App\Http\Controllers\API\Doctor\Auth\LogoutController as DoctorLogoutController;
 
 // Doctor Login Route
 Route::controller(DoctorLoginController::class)->group(function () {
     Route::post('/doctor/login', 'login');
 });
-
 // Doctor Register Route
 Route::controller(DoctorRegisterController::class)->group(function () {
     Route::post('/doctor/register', 'register');
@@ -61,6 +61,10 @@ Route::middleware(['auth:doctor-api'])->group(function () {
     // Doctor Data Route
     Route::controller(DoctorDashboardController::class)->group(function () {
         Route::get('/doctor/data', 'auth');
+    });
+    // Logout Route
+    Route::controller(DoctorLogoutController::class)->group(function () {
+        Route::post('/doctor/logout', 'logout');
     });
 });
 
