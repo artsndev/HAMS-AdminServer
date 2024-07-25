@@ -62,6 +62,11 @@ const routes = [
         component: () => import('../components/doctor/auth/Login.vue')
     },
     {
+        path: '/doctor/register',
+        name: 'Doctor Register',
+        component: () => import('../components/doctor/auth/Register.vue')
+    },
+    {
         path: '/doctor/dashboard',
         name: 'Doctor Dashboard',
         component: () => import('../components/doctor/Dashboard.vue'),

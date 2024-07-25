@@ -2,9 +2,8 @@
     <v-container class="mt-16">
         <v-row justify="center" align="center" class="min-vh-100 mt-16">
             <v-col xl="3">
-                <v-card width="500">
-                    <v-card-text>Doctor Login Page</v-card-text>
-                    <v-card-text class="mt-n5">Glad to see you again. 🥰</v-card-text>
+                <v-card>
+                    <v-card-text class="font-weight-bold fs-30 mb-n5">Login Here</v-card-text>
                     <v-card-item>
                         <v-alert v-if="error" icon="mdi-alert" v-model="alert"  variant="tonal" class="mb-5"  color="red-darken-4">
                             {{ error }}
@@ -23,6 +22,9 @@
                                 </v-col>
                             </v-row>
                         </v-form>
+                        <div class="text-center">
+                            <p class="text-muted">Doesn't have an account? <RouterLink to="/doctor/register" class="text-decoration-none" color="primary"><span>Register here</span></RouterLink></p>
+                        </div>
                     </v-card-item>
                 </v-card>
             </v-col>
@@ -107,3 +109,10 @@ const togglePasswordVisibility = () => {
     showPassword.value = !showPassword.value;
 }
 </script>
+
+
+<style>
+.fs-30 {
+    font-size: 30px;
+}
+</style>
