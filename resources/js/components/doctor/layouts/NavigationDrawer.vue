@@ -27,10 +27,9 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const items = ref([
-    { icon: 'mdi-chart-donut', text: 'Dashboard', routeName: 'Admin Dashboard' },
+    { icon: 'mdi-chart-donut', text: 'Dashboard', routeName: 'Doctor Dashboard' },
     { icon: 'mdi-clipboard-text-multiple-outline', text: 'Appointments', routeName: 'Admin Appointment'},
-    { icon: 'mdi-doctor', text: 'Doctors', routeName: 'Admin Doctor'},
-    { icon: 'mdi-account-multiple-outline', text: 'Users', routeName: 'Admin User'},
+    { icon: 'mdi-account-multiple-outline', text: 'Patients', routeName: 'Admin User'},
 ]);
 
 const router = useRouter();
@@ -40,14 +39,14 @@ const isRouteActive = (routeName) => {
 
 const logout = async () => {
     try {
-        const token = localStorage.getItem('adminToken');
-        await axios.post('/api/admin/logout', null, {
+        const token = localStorage.getItem('doctorToken');
+        await axios.post('/api/doctor/logout', null, {
             headers: {
                 Authorization: `Bearer ${token}`
             },
         });
-        localStorage.removeItem('adminToken');
-        router.push({ name: 'Admin Login' });
+        localStorage.removeItem('doctorToken');
+        router.push({ name: 'Doctor Login' });
     } catch (error) {
         console.error(error);
     }

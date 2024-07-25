@@ -17,29 +17,63 @@ const routes = [
     {
         path: '/admin/login',
         name: 'Admin Login',
-        component: () => import('../components/admin/auth/Login.vue')
+        component: () => import('../components/admin/auth/Login.vue'),
+        meta: {
+            admin: true
+        }
     },
     {
         path: '/admin/dashboard',
         name: 'Admin Dashboard',
-        component: () => import('../components/admin/Dashboard.vue')
+        component: () => import('../components/admin/Dashboard.vue'),
+        meta: {
+            requiresAdminAuth: true,
+        }
     },
     {
         path: '/admin/appointments',
         name: 'Admin Appointment',
-        component: () => import('../components/admin/Appointment.vue')
+        component: () => import('../components/admin/Appointment.vue'),
+        meta: {
+            requiresAdminAuth: true,
+        }
     },
     {
         path: '/admin/doctors',
         name: 'Admin Doctor',
-        component: () => import('../components/admin/Doctor.vue')
+        component: () => import('../components/admin/Doctor.vue'),
+        meta: {
+            requiresAdminAuth: true,
+        }
     },
     {
         path: '/admin/users',
         name: 'Admin User',
-        component: () => import('../components/admin/User.vue')
+        component: () => import('../components/admin/User.vue'),
+        meta: {
+            requiresAdminAuth: true,
+        }
     },
 
+    // Doctor Web Routes
+    {
+        path: '/doctor/login',
+        name: 'Doctor Login',
+        component: () => import('../components/doctor/auth/Login.vue')
+    },
+    {
+        path: '/doctor/register',
+        name: 'Doctor Register',
+        component: () => import('../components/doctor/auth/Register.vue')
+    },
+    {
+        path: '/doctor/dashboard',
+        name: 'Doctor Dashboard',
+        component: () => import('../components/doctor/Dashboard.vue'),
+        meta: {
+            requiresDoctorAuth: true,
+        }
+    },
 ]
 
 const router = createRouter({
@@ -56,6 +90,20 @@ router.beforeEach((to, from, next) => {
         next({ name: 'Admin Login' });
     } else if (admin && isAdminLoggedIn) {
         next({ name: 'Admin Dashboard' });
+    } else {
+        next();
+    }
+});
+
+// Doctor Auth Middleware
+router.beforeEach((to, from, next) => {
+    const requiresDoctorAuth = to.matched.some(record => record.meta.requiresDoctorAuth);
+    const doctor = to.matched.some(record => record.meta.doctor);
+    const isDoctorLoggedIn = localStorage.getItem('doctorToken');
+    if (requiresDoctorAuth && !isDoctorLoggedIn) {
+        next({ name: 'Doctor Login' });
+    } else if (doctor && isDoctorLoggedIn) {
+        next({ name: 'Doctor Dashboard' });
     } else {
         next();
     }
