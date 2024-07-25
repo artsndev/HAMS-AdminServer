@@ -18,6 +18,6 @@ class LogoutController extends Controller
     {
         Session::flush();
         Auth::guard('doctor')->logout();
-        return response()->json(['message' => 'Admin successfully signed out'], 200);
+        return response()->json(['message' => 'Doctor successfully signed out'], 200);
     }
 }

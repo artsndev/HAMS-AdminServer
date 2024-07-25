@@ -19,6 +19,7 @@ class RegisterController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
+                'name' => 'required',
                 'email' => 'required|unique:doctors|email',
                 'password' => 'required|min:8|confirmed',
             ]);
@@ -45,7 +46,7 @@ class RegisterController extends Controller
                 'message' => "User registered successfully",
                 'mail_message' => 'Mail sent successfully',
             ];
-            Auth::login($doctor);
+            Auth::guard('doctor')->login($doctor);
             return response()->json($response, 201)->header('Authorization', 'Bearer ' . $doctorToken);
         } catch (\Exception $e) {
             $response = [

@@ -95,7 +95,7 @@ return [
 
         'doctors' => [
             'driver' => 'eloquent',
-            'model' => App\Models\doctor::class,
+            'model' => App\Models\Doctor::class,
         ],
     ],
 

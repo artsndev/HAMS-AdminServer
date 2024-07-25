@@ -89,8 +89,8 @@ const login = async () => {
             }, 10000);
         }
         if(response.data.success){
-            localStorage.setItem('adminToken', response.data.data.adminToken);
-            router.push('/admin/dashboard');
+            localStorage.setItem('doctorToken', response.data.data.doctorToken);
+            router.push('/doctor/dashboard');
         } else {
             if (response.data.errors) {
                 setValidationError();
