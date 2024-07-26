@@ -2,8 +2,8 @@
     <v-navigation-drawer dark border="0" :dark="$vuetify.theme.dark" :color="$vuetify.theme.dark ? 'blue-grey-darken-3' : 'blue-darken-4'" active>
         <template v-slot:append>
             <div class="text-center">
-                <p class="text-grey fs-14">© 2024 QuirkyQuarks Squadrons</p>
-                <p class="text-grey mb-2 fs-14"> All rights reserved.</p>
+                <p class="text-grey fs-14">@QuirkyQuarks Squadrons</p>
+                <p class="text-grey mb-2 fs-14">© 2024 All rights reserved.</p>
             </div>
         </template>
         <v-list density="compact" nav :color="$vuetify.theme.dark ? 'blue-darken-3' : 'blue-lighten-1'" class="mt-5">
@@ -29,6 +29,7 @@ import { useRouter } from 'vue-router';
 const items = ref([
     { icon: 'mdi-chart-donut', text: 'Dashboard', routeName: 'Doctor Dashboard' },
     { icon: 'mdi-clipboard-text-multiple-outline', text: 'Appointments', routeName: 'Admin Appointment'},
+    { icon: 'mdi-calendar-multiple', text: 'Schedule', routeName: 'Doctor Schedule'},
     { icon: 'mdi-account-multiple-outline', text: 'Patients', routeName: 'Admin User'},
 ]);
 
