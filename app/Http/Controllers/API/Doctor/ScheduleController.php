@@ -6,6 +6,7 @@ use App\Models\Schedule;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ScheduleController extends Controller
 {
@@ -22,19 +23,40 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'date' => 'required|date',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
-        ]);
-
-        $schedule = Schedule::create([
-            'doctor_id' => Auth::guard('doctor')->user()->id,
-            'date' => $request->date,
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
-        ]);
-
+        try {
+            $validator = Validator::make($request->all(), [
+                'date' => 'required|date_format:Y-m-d',
+                'start_time' => 'required|date_format:H:i',
+                'end_time' => 'required|date_format:H:i|after:start_time',
+            ]);
+            if ($validator->fails()) {
+                $response = [
+                    'success' => false,
+                    'errors' => $validator->errors(),
+                ];
+                return response()->json($response, 200);
+            }
+            $schedule = Schedule::create([
+                'doctor_id' => Auth::user()->id,
+                'date' => $request->input('date'),
+                'start_time' => $request->input('start_time'),
+                'end_time' => $request->input('end_time'),
+            ]);
+            $response = [
+                'success' => true,
+                'data' => [
+                    'schedule' => $schedule,
+                ],
+                'message' => "Doctor Scheduled successfully",
+            ];
+            return response()->json($response, 201);
+        } catch (\Exception $e) {
+            $response = [
+                'success' => false,
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($response, 500);
+        }
     }
 
     /**
