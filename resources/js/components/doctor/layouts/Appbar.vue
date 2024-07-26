@@ -13,7 +13,7 @@
             <v-icon v-else key="light">mdi-weather-sunny</v-icon>
         </v-btn>
         <v-divider vertical inset class="d-none d-sm-flex"></v-divider>
-        <v-list-item lines="two" prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg" class="mx-1 d-none d-sm-flex" title="John Doe" subtitle="johndoe@gmail.com">
+        <v-list-item lines="two" prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg" class="mx-1 d-none d-sm-flex" :title="name" :subtitle="email">
             <template v-slot:append class="mx-n5">
                 <v-icon icon="mdi-menu-down"></v-icon>
             </template>
@@ -23,24 +23,31 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import NavigationDrawer from './NavigationDrawer.vue';
 
 const drawer = ref(true);
-const dark = ref(true);
-const themeAnimating = ref(true);
-
-const toggleTheme = () => {
-    if (!themeAnimating.value) {
-        themeAnimating.value = true;
-        setTimeout(() => {
-            dark.value = !dark.value;
-            themeAnimating.value = false;
-        }, 200);
-    }
-}
-
 const toggleMenu = () => {
     drawer.value = !drawer.value;
-};
+}
+
+const name = ref('')
+const email = ref('')
+const getUser = async () => {
+    try {
+        const token = localStorage.getItem('doctorToken')
+        const response = await axios.get('/api/doctor/data', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        })
+        name.value = response.data.name
+        email.value = response.data.email
+    } catch (error) {
+        console.log(error)
+    }
+}
+onMounted(() => {
+    getUser()
+})
 </script>
