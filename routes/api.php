@@ -65,6 +65,7 @@ Route::middleware(['auth:doctor-api'])->group(function () {
     });
     // Doctor Schedule Controller
     Route::controller(DoctorScheduleController::class)->group(function () {
+        Route::get('/doctor/schedule', 'index');
         Route::post('/doctor/schedule', 'store');
     });
     // Logout Route

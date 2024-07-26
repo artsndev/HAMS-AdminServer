@@ -15,7 +15,19 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $schedule = Schedule::get();
+            $data = [
+                'success' => true,
+                'data' => $schedule,
+            ];
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+            $errors = [
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($errors, 500);
+        }
     }
 
     /**
