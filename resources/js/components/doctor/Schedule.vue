@@ -7,54 +7,100 @@
             </template>
         </v-breadcrumbs>
     </v-container>
-    <v-container class="mt-n5">
+    <v-container class="mt-n10">
         <v-container>
             <v-row>
                 <v-col cols="12">
                     <v-card>
-                    <v-card-text>
-                        <v-data-table :headers="headers" :items="filteredData" :items-per-page="pagination.rowsPerPage" :page.sync="pagination.page" :server-items-length="totalResults" class="elevation-1" :loading="isLoading">
-                        <template v-slot:top>
-                            <v-toolbar flat>
-                                <v-toolbar-title>Schedule</v-toolbar-title>
-                                <v-spacer></v-spacer>
-                                <v-spacer></v-spacer>
-                                <v-text-field class="me-5" rounded color="primary" variant="outlined" v-model="searchQuery"  density="compact" label="Search by Time, Date and Year" single-line hide-details/>
-                            </v-toolbar>
-                        </template>
-                        <template v-slot:item.date="{ item }">{{ formatDate(item.date) }}</template>
-                        <template v-slot:item.start_time="{ item }">{{ formatDate(item.start_time) }}</template>
-                        <template v-slot:item.end_time="{ item }">{{ item.end_time }}</template>
-                        <template v-slot:item.created_at="{ item }">{{ formatDate(item.created_at) }}</template>
-                        <template v-slot:item.actions="{ item }">
-                            <v-dialog v-model="item.viewDialog" max-width="500">
-                                <template v-slot:activator="{ props }">
-                                    <v-btn icon @click="viewItem(item)" variant="text" color="primary" v-bind="props">
-                                        <v-icon>mdi-eye</v-icon>
-                                    </v-btn>
-                                </template>
-                                <template v-slot:default="{ isActive }">
-                                    <v-card title="Dialog">
-                                        <v-card-text>{{ formatDate(item.date) }}</v-card-text>
-                                        <v-card-actions>
-                                        <v-spacer></v-spacer>
-                                        <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
-                                        </v-card-actions>
-                                    </v-card>
-                                </template>
-                            </v-dialog>
-                            <v-btn icon @click="editItem(item)" variant="text" color="warning">
-                                <v-icon>mdi-pencil</v-icon>
-                            </v-btn>
-                            <v-btn icon @click="deleteItem(item)" variant="text" color="red-darken-3">
-                                <v-icon>mdi-delete</v-icon>
-                            </v-btn>
-                        </template>
-                        <template v-slot:no-data>
-                            <v-alert type="info" :value="true">No data available</v-alert>
-                        </template>
-                        </v-data-table>
-                    </v-card-text>
+                        <v-card-text>
+                            <v-data-table :headers="headers" loading-text="Loading... Please wait" :items="filteredData" :items-per-page="pagination.rowsPerPage" :page.sync="pagination.page" :server-items-length="totalResults" class="elevation-0" :loading="isLoading">
+                            <template v-slot:top>
+                                <v-toolbar flat color="transparent">
+                                    <v-toolbar-title>My Schedule</v-toolbar-title>
+                                    <v-spacer></v-spacer>
+                                    <v-spacer></v-spacer>
+                                    <v-text-field rounded color="primary" variant="outlined" v-model="searchQuery"  density="compact" label="Search by Time, Date and Year" single-line hide-details/>
+                                </v-toolbar>
+                            </template>
+                            <template v-slot:item.date="{ item }">{{ formatDate(item.date) }}</template>
+                            <template v-slot:item.start_time="{ item }">{{ item.start_time }}</template>
+                            <template v-slot:item.end_time="{ item }">{{ item.end_time }}</template>
+                            <template v-slot:item.created_at="{ item }">{{ formatDate(item.created_at) }}</template>
+                            <template v-slot:item.actions="{ item }">
+                                <!-- View Dialog -->
+                                <v-dialog v-model="item.viewDialog" max-width="500" persistent>
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn icon @click="viewItem(item)" variant="text" color="primary" v-bind="props">
+                                            <v-icon>mdi-eye</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <template v-slot:default="{ isActive }">
+                                        <v-card title="View Schedule" prepend-icon="mdi-calendar-cursor">
+                                            <v-card-text>{{ formatDate(item.date) }}</v-card-text>
+                                            <v-card-actions>
+                                            <v-spacer></v-spacer>
+                                            <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
+                                            </v-card-actions>
+                                        </v-card>
+                                    </template>
+                                </v-dialog>
+                                <!-- Edit Dialog -->
+                                <v-dialog v-model="item.editDialog" max-width="500" persistent>
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn icon @click="editItem(item)" variant="text" color="warning" v-bind="props">
+                                            <v-icon>mdi-pencil</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <template v-slot:default="{ isActive }">
+                                        <v-card title="Edit Schedule" prepend-icon="mdi-calendar-edit">
+                                            <v-card-text>{{ formatDate(item.date) }}</v-card-text>
+                                            <v-card-actions>
+                                            <v-spacer></v-spacer>
+                                            <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
+                                            </v-card-actions>
+                                        </v-card>
+                                    </template>
+                                </v-dialog>
+                                <!-- Remove Dialog -->
+                                <v-dialog v-model="item.deleteDialog" max-width="500" persistent>
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn icon @click="deleteItem(item)" variant="text" color="red-darken-3" v-bind="props">
+                                            <v-icon>mdi-delete</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <template v-slot:default="{ isActive }">
+                                        <v-card title="Remove Schedule" prepend-icon="mdi-calendar-remove">
+                                            <v-card-text>{{ formatDate(item.date) }}</v-card-text>
+                                            <v-card-actions>
+                                            <v-spacer></v-spacer>
+                                            <v-btn size="small" class="text-capitalize" text="Close Dialog" @click="isActive.value = false"></v-btn>
+                                            </v-card-actions>
+                                        </v-card>
+                                    </template>
+                                </v-dialog>
+                            </template>
+                            <template v-slot:no-data>
+                                <v-alert type="info" :value="true">No data available</v-alert>
+                            </template>
+                            </v-data-table>
+                            <div class="text-end">
+                                <!-- Add Data Dialog -->
+                                <v-dialog max-width="500" persistent>
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn class="text-capitalize" size="small" color="primary" prepend-icon="mdi-plus" v-bind="props">Add Schedule</v-btn>
+                                    </template>
+                                    <template v-slot:default="{ isActive }">
+                                        <v-card title="Add a Schedule" prepend-icon="mdi-calendar-plus">
+                                            <v-card-text>Add Schedule</v-card-text>
+                                            <v-card-actions>
+                                            <v-spacer></v-spacer>
+                                            <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
+                                            </v-card-actions>
+                                        </v-card>
+                                    </template>
+                                </v-dialog>
+                            </div>
+                        </v-card-text>
                     </v-card>
                 </v-col>
             </v-row>
@@ -87,11 +133,11 @@ const pagination = ref({
 });
 
 const headers = [
-    { text: 'Date', value: 'date' },
-    { text: 'Start Time', value: 'start_time' },
-    { text: 'End Time', value: 'end_time' },
-    { text: 'Start Date', value: 'created_at' },
-    { text: 'Actions', value: 'actions', sortable: false }, // Added actions column
+    { title: 'Date', value: 'date', align: 'center' },
+    { title: 'Start Time', value: 'start_time', align: 'center' },
+    { title: 'End Time', value: 'end_time', align: 'center' },
+    { title: 'Start Date', value: 'created_at', align: 'center' },
+    { title: 'Actions', value: 'actions', sortable: false, align: 'center' }, // Added actions column
 ];
 
 const fetchData = async () => {
