@@ -74,6 +74,14 @@ const routes = [
             requiresDoctorAuth: true,
         }
     },
+    {
+        path: '/doctor/schedule',
+        name: 'Doctor Schedule',
+        component: () => import('../components/doctor/Schedule.vue'),
+        meta: {
+            requiresDoctorAuth: true,
+        }
+    },
 ]
 
 const router = createRouter({

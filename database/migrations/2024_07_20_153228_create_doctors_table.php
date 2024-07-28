@@ -29,6 +29,15 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        Schema::create('schedules', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('doctor_id')->constrained()->onDelete('cascade');
+            $table->date('date');
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -38,5 +47,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('doctors');
         Schema::dropIfExists('doctor_sessions');
+        Schema::dropIfExists('schedules');
     }
 };
