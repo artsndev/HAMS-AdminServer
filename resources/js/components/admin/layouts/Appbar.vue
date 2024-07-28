@@ -31,6 +31,19 @@ const toggleMenu = () => {
     drawer.value = !drawer.value
 }
 
+const dark = ref(true);
+const themeAnimating = ref(true);
+
+const toggleTheme = () => {
+    if (!themeAnimating.value) {
+        themeAnimating.value = true;
+        setTimeout(() => {
+            dark.value = !dark.value;
+            themeAnimating.value = false;
+        }, 200);
+    }
+}
+
 const name = ref('')
 const email = ref('')
 const getUser = async () => {
