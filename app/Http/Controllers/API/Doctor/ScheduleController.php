@@ -16,7 +16,7 @@ class ScheduleController extends Controller
     public function index()
     {
         try {
-            $schedule = Schedule::get();
+            $schedule = Schedule::latest()->get();
             $data = [
                 'success' => true,
                 'data' => $schedule,
