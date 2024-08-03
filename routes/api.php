@@ -16,6 +16,8 @@ Route::controller(UnauthenticatedController::class)->group(function () {
 
 use App\Http\Controllers\API\Admin\Auth\LoginController as AdminLoginController;
 use App\Http\Controllers\API\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\API\Admin\DoctorController as AdminDoctorController;
+use App\Http\Controllers\API\Admin\UserController as AdminUserController;
 use App\Http\Controllers\API\Admin\Auth\LogoutController as AdminLogoutController;
 
 // Admin Login Route
@@ -28,6 +30,14 @@ Route::middleware(['auth:admin-api'])->group(function () {
     // Admin Data Route
     Route::controller(AdminDashboardController::class)->group(function () {
         Route::get('/admin/data', 'auth');
+    });
+    // Admin Doctor Route
+    Route::controller(AdminDoctorController::class)->group(function () {
+        Route::get('/admin/doctor', 'index');
+    });
+    // Admin Data Route
+    Route::controller(AdminUserController::class)->group(function () {
+        Route::get('/admin/user', 'index');
     });
     // Logout Route
     Route::controller(AdminLogoutController::class)->group(function () {

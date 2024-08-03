@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Doctor;
 use Illuminate\Http\Request;
 
 class DoctorController extends Controller
@@ -12,7 +13,19 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $doctor = Doctor::latest()->get();
+            $data = [
+                'success' => true,
+                'data' => $doctor,
+            ];
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+            $errors = [
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($errors, 500);
+        }
     }
 
     /**
