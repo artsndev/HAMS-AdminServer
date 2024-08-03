@@ -35,6 +35,17 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        // Schema::create('appointments', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
+        //     $table->foreignId('doctor_id')->constrained('doctors')->cascadeOnDelete()->cascadeOnUpdate();
+        //     $table->string('status')->default('pending');
+        //     $table->text('purpose_of_appointment');
+        //     $table->string('session_of_appointment');
+        //     $table->dateTime('appointment_time');
+        //     $table->timestamps();
+        // });
     }
 
     /**
