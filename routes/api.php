@@ -34,10 +34,14 @@ Route::middleware(['auth:admin-api'])->group(function () {
     // Admin Doctor Route
     Route::controller(AdminDoctorController::class)->group(function () {
         Route::get('/admin/doctor', 'index');
+        Route::put('/admin/doctor/{id}', 'update');
+        Route::delete('/admin/doctor/{id}', 'destroy');
     });
     // Admin Data Route
     Route::controller(AdminUserController::class)->group(function () {
         Route::get('/admin/user', 'index');
+        Route::put('/admin/user/{id}', 'update');
+        Route::delete('/admin/user/{id}', 'destroy');
     });
     // Logout Route
     Route::controller(AdminLogoutController::class)->group(function () {

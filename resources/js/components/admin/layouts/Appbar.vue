@@ -62,9 +62,8 @@ const getUser = async () => {
     } catch (error) {
         // console.log(error)
         if (error.response.status === 401) {
+            localStorage.removeItem('adminToken');
             setTimeout(() => {
-                localStorage.removeItem('adminToken');
-                router.push('/admin/login');
                 location.reload();
             }, 3000);
         }
