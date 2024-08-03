@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Schedule extends Model
+class Appointment extends Model
 {
     use HasFactory;
 
@@ -15,15 +15,27 @@ class Schedule extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'user_id',
         'doctor_id',
-        'date',
-        'start_time',
-        'end_time',
+        'purpose_of_appointment',
+        'session_of_appointment',
+        'appointment_time',
+        'status',
     ];
 
     /**
      *
-     * Define the relationship between Doctor and Schedule models.
+     * Define the relationship between User and Appointment models.
+     *
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
+
+    /**
+     *
+     * Define the relationship between User and Appointment models.
      *
      */
     public function doctor()
