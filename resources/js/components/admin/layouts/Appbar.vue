@@ -24,6 +24,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router'
 import NavigationDrawer from './NavigationDrawer.vue';
 
 const drawer = ref(true)
@@ -44,6 +45,8 @@ const toggleTheme = () => {
     }
 }
 
+const router = useRouter()
+
 const name = ref('')
 const email = ref('')
 const getUser = async () => {
@@ -57,7 +60,14 @@ const getUser = async () => {
         name.value = response.data.name
         email.value = response.data.email
     } catch (error) {
-        console.log(error)
+        // console.log(error)
+        if (error.response.status === 401) {
+            setTimeout(() => {
+                localStorage.removeItem('adminToken');
+                router.push('/admin/login');
+                location.reload();
+            }, 3000);
+        }
     }
 }
 onMounted(() => {
