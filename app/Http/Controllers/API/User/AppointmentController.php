@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\API\User;
 
+use App\Models\Appointment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Appointment;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AppointmentController extends Controller
@@ -27,8 +28,8 @@ class AppointmentController extends Controller
             $validator = Validator::make($request->all(), [
                 'purpose_of_appointment' => 'required',
                 'session_of_appointment' => 'required',
-                'status' => 'required',
-                'appointment_time' => 'required',
+                // 'status' => 'required',
+                'appointment_time' => 'required|date_format:Y-m-d H:i',
             ]);
             if ($validator->fails()) {
                 $response = [
@@ -38,6 +39,8 @@ class AppointmentController extends Controller
                 return response()->json($response, 200);
             }
             $appointment = Appointment::create([
+                'user_id' => Auth::user()->id,
+                'doctor_id' => $request->input('doctor_id'),
                 'purpose_of_appointment' => $request->input('purpose_of_appointment'),
                 'session_of_appointment' => $request->input('session_of_appointment'),
                 'status' => $request->input('status'),

@@ -26,8 +26,8 @@ class Schedule extends Model
      * Define the relationship between Doctor and Schedule models.
      *
      */
-    public function schedules()
+    public function doctor()
     {
-        return $this->hasMany(Schedule::class);
+        return $this->belongsTo(Doctor::class,'doctor_id');
     }
 }

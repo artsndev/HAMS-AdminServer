@@ -73,7 +73,7 @@ class Doctor extends Authenticatable implements JWTSubject
      */
     public function schedule()
     {
-        return $this->hasMany(Schedule::class);
+        return $this->hasMany(Schedule::class,'doctor_id');
     }
 
     /**
@@ -83,6 +83,6 @@ class Doctor extends Authenticatable implements JWTSubject
      */
     public function appointment()
     {
-        return $this->hasMany(Appointment::class);
+        return $this->hasMany(Appointment::class,'doctor_id');
     }
 }

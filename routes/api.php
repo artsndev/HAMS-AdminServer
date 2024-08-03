@@ -84,6 +84,8 @@ Route::middleware(['auth:doctor-api'])->group(function () {
 use App\Http\Controllers\API\User\Auth\LoginController as UserLoginController;
 use App\Http\Controllers\API\User\Auth\RegisterController as UserRegisterController;
 use App\Http\Controllers\API\User\DashboardController as UserDashboardController;
+use App\Http\Controllers\API\User\AppointmentController as UserAppointmentController;
+use App\Http\Controllers\API\User\Auth\LogoutController as UserLogoutController;
 
 // User Login Route
 Route::controller(UserLoginController::class)->group(function () {
@@ -100,5 +102,13 @@ Route::middleware(['auth:user-api'])->group(function () {
     // User Data Route
     Route::controller(UserDashboardController::class)->group(function () {
         Route::get('/user/data', 'auth');
+    });
+    // User Appointment Route
+    Route::controller(UserAppointmentController::class)->group(function () {
+        Route::post('/user/appointment', 'store');
+    });
+    // User Logout Route
+    Route::controller(UserLogoutController::class)->group(function () {
+        Route::post('/user/logout', 'logout');
     });
 });

@@ -69,11 +69,11 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      *
-     * Define the relationship between Doctor and Schedule models.
+     * Define the relationship between User and Appointment models.
      *
      */
     public function appointment()
     {
-        return $this->hasMany(Appointment::class);
+        return $this->hasMany(Appointment::class,'user_id');
     }
 }
