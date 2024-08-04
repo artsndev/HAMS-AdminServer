@@ -83,7 +83,7 @@
                             </v-data-table>
                             <div class="text-end">
                                 <!-- Add Data Dialog -->
-                                <v-dialog max-width="500" persistent>
+                                <v-dialog v-model="addScheduledialog" max-width="500" persistent>
                                     <template v-slot:activator="{ props }">
                                         <v-btn class="text-capitalize" size="small" color="primary" prepend-icon="mdi-plus" v-bind="props">Add Schedule</v-btn>
                                     </template>
@@ -169,11 +169,14 @@ const fetchData = async () => {
 };
 
 const schedule_time_error = ref('')
+
 const timer = ref(null)
 
 const form = reactive({
     schedule_time: ''
 })
+
+const addScheduledialog = ref(false)
 
 const addSchedule = async () => {
     try {
@@ -198,6 +201,7 @@ const addSchedule = async () => {
             }, 10000);
         }
         if (response.data.success) {
+            addScheduledialog.value = false
             alert('Schedule added')
         } else {
             setValidationError()
@@ -206,10 +210,6 @@ const addSchedule = async () => {
         console.log(error)
     }
 }
-
-const formatDate = (dateTime) => {
-    return dayjs(dateTime).format('dddd, MMMM D, YYYY hh:mm A');
-};
 
 const editItem = (item) => {
     console.log('Edit item:', item);
@@ -230,11 +230,15 @@ const totalResults = computed(() => {
     return data.value.length;
 });
 
+const formatDate = (dateTime) => {
+    return dayjs(dateTime).format('dddd, MMMM D, YYYY hh:mm A');
+};
+
 const filteredData = computed(() => {
     if (!data.value) return [];
     const search = searchQuery.value.toLowerCase();
     return data.value.filter(item =>
-        item.schedule_time.toLowerCase().includes(search)
+        formatDate(item.schedule_time).toLowerCase().includes(search)
     );
 });
 
