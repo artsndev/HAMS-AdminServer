@@ -36,6 +36,9 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         try {
+            $request->merge([
+                'schedule_time' => str_replace('T', ' ', $request->input('schedule_time'))
+            ]);
             $validator = Validator::make($request->all(), [
                 'schedule_time' => 'required|unique:schedules,schedule_time|date_format:Y-m-d H:i',
             ]);
@@ -46,6 +49,7 @@ class ScheduleController extends Controller
                 ];
                 return response()->json($response, 200);
             }
+
             $schedule = Schedule::create([
                 'doctor_id' => Auth::user()->id,
                 'schedule_time' => $request->input('schedule_time'),
