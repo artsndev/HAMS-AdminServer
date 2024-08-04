@@ -142,32 +142,6 @@ const headers = [
     { title: 'Actions', value: 'actions', sortable: false, align: 'center' }, // Added actions column
 ];
 
-const fetchData = async () => {
-    try {
-        isLoading.value = true;
-        const token = localStorage.getItem('doctorToken');
-        const response = await axios.get('/api/doctor/schedule', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        data.value = response.data.data
-        console.log(data.value)
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        if (error.response && error.response.status === 401) {
-            snackbar.value = true;
-            text.value = 'Error fetching your data. Please try again.';
-            localStorage.removeItem('doctorToken');
-            setTimeout(() => {
-                location.reload();
-            }, 3000);
-        }
-    } finally {
-        isLoading.value = false;
-    }
-};
-
 const schedule_time_error = ref('')
 
 const timer = ref(null)
@@ -210,6 +184,33 @@ const addSchedule = async () => {
         console.log(error)
     }
 }
+
+
+const fetchData = async () => {
+    try {
+        isLoading.value = true;
+        const token = localStorage.getItem('doctorToken');
+        const response = await axios.get('/api/doctor/schedule', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        data.value = response.data.data
+        console.log(data.value)
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        if (error.response && error.response.status === 401) {
+            snackbar.value = true;
+            text.value = 'Error fetching your data. Please try again.';
+            localStorage.removeItem('doctorToken');
+            setTimeout(() => {
+                location.reload();
+            }, 3000);
+        }
+    } finally {
+        isLoading.value = false;
+    }
+};
 
 const editItem = (item) => {
     console.log('Edit item:', item);
