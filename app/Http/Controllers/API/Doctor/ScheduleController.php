@@ -38,8 +38,7 @@ class ScheduleController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'date' => 'required|date_format:Y-m-d',
-                'start_time' => 'required|date_format:H:i',
-                'end_time' => 'required|date_format:H:i|after:start_time',
+                'schedule_time' => 'required|date_format:Y-m-d H:i',
             ]);
             if ($validator->fails()) {
                 $response = [
@@ -50,9 +49,7 @@ class ScheduleController extends Controller
             }
             $schedule = Schedule::create([
                 'doctor_id' => Auth::user()->id,
-                'date' => $request->input('date'),
-                'start_time' => $request->input('start_time'),
-                'end_time' => $request->input('end_time'),
+                'schedule_time' => $request->input('schedule_time'),
             ]);
             $response = [
                 'success' => true,
