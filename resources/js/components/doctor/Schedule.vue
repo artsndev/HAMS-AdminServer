@@ -19,12 +19,10 @@
                                     <v-toolbar-title>My Schedule</v-toolbar-title>
                                     <v-spacer></v-spacer>
                                     <v-spacer></v-spacer>
-                                    <v-text-field rounded color="primary" variant="outlined" v-model="searchQuery"  density="compact" label="Search by Time, Date and Year" single-line hide-details/>
+                                    <v-text-field rounded color="primary" variant="outlined" v-model="searchQuery"  density="compact" label="Search by Time, Date and Year at Schedule Time" single-line hide-details/>
                                 </v-toolbar>
                             </template>
-                            <template v-slot:item.date="{ item }">{{ formatDate(item.date) }}</template>
-                            <template v-slot:item.start_time="{ item }">{{ item.start_time }}</template>
-                            <template v-slot:item.end_time="{ item }">{{ item.end_time }}</template>
+                            <template v-slot:item.schedule_time="{ item }">{{ formatDate(item.schedule_time) }}</template>
                             <template v-slot:item.created_at="{ item }">{{ formatDate(item.created_at) }}</template>
                             <template v-slot:item.actions="{ item }">
                                 <!-- View Dialog -->
@@ -36,7 +34,7 @@
                                     </template>
                                     <template v-slot:default="{ isActive }">
                                         <v-card title="View Schedule" prepend-icon="mdi-calendar-cursor">
-                                            <v-card-text>{{ formatDate(item.date) }}</v-card-text>
+                                            <v-card-text>{{ formatDate(item.schedule_time) }}</v-card-text>
                                             <v-card-actions>
                                             <v-spacer></v-spacer>
                                             <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
@@ -53,7 +51,7 @@
                                     </template>
                                     <template v-slot:default="{ isActive }">
                                         <v-card title="Edit Schedule" prepend-icon="mdi-calendar-edit">
-                                            <v-card-text>{{ formatDate(item.date) }}</v-card-text>
+                                            <v-card-text>{{ formatDate(item.schedule_time) }}</v-card-text>
                                             <v-card-actions>
                                             <v-spacer></v-spacer>
                                             <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
@@ -70,7 +68,7 @@
                                     </template>
                                     <template v-slot:default="{ isActive }">
                                         <v-card title="Remove Schedule" prepend-icon="mdi-calendar-remove">
-                                            <v-card-text>{{ formatDate(item.date) }}</v-card-text>
+                                            <v-card-text>{{ formatDate(item.schedule_time) }}</v-card-text>
                                             <v-card-actions>
                                             <v-spacer></v-spacer>
                                             <v-btn size="small" class="text-capitalize" text="Close Dialog" @click="isActive.value = false"></v-btn>
@@ -133,10 +131,8 @@ const pagination = ref({
 });
 
 const headers = [
-    { title: 'Date', value: 'date', align: 'center' },
-    { title: 'Start Time', value: 'start_time', align: 'center' },
-    { title: 'End Time', value: 'end_time', align: 'center' },
-    { title: 'Start Date', value: 'created_at', align: 'center' },
+    { title: 'Schedule Time', value: 'schedule_time', align: 'center' },
+    { title: 'Posted Date', value: 'created_at', align: 'center' },
     { title: 'Actions', value: 'actions', sortable: false, align: 'center' }, // Added actions column
 ];
 
@@ -200,10 +196,9 @@ const filteredData = computed(() => {
   if (!data.value) return []; // Ensure data is defined before filtering
     const search = searchQuery.value.toLowerCase();
     return data.value.filter(item =>
-        item.date.toLowerCase().includes(search) ||
-        item.start_time.toLowerCase().includes(search) ||
-        item.end_time.toLowerCase().includes(search) ||
-        item.created_at.toLowerCase().includes(search)
+        item.schedule_time.toLowerCase().includes(search)
+        // ||
+        // item.created_at.toLowerCase().includes(search)
     );
 });
 

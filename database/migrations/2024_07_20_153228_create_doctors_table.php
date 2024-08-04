@@ -33,9 +33,7 @@ return new class extends Migration
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
             $table->foreignId('doctor_id')->constrained()->onDelete('cascade');
-            $table->date('date');
-            $table->time('start_time');
-            $table->time('end_time');
+            $table->dateTime('schedule_time');
             $table->timestamps();
         });
     }
