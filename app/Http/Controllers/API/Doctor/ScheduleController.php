@@ -37,8 +37,7 @@ class ScheduleController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'date' => 'required|date_format:Y-m-d',
-                'schedule_time' => 'required|date_format:Y-m-d H:i',
+                'schedule_time' => 'required|unique:schedules,schedule_time|date_format:Y-m-d H:i',
             ]);
             if ($validator->fails()) {
                 $response = [
