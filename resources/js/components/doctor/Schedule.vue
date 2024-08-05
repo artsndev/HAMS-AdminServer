@@ -117,7 +117,6 @@ import Appbar from './layouts/Appbar.vue';
 import { ref, reactive, onMounted, computed, watch } from 'vue';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import localizedFormat from 'dayjs/plugin/localizedFormat';
 
 const breadCrumbsItems = ref([
     { title: 'Dashboard', href: '/doctor/dashboard', disabled: false },
@@ -176,7 +175,7 @@ const addSchedule = async () => {
         }
         if (response.data.success) {
             addScheduledialog.value = false
-            alert('Schedule added')
+            fetchData();
         } else {
             setValidationError()
         }
