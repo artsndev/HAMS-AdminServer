@@ -83,13 +83,19 @@
                             </v-data-table>
                             <div class="text-end">
                                 <!-- Add Data Dialog -->
-                                <v-dialog max-width="500" persistent>
+                                <v-dialog v-model="addScheduledialog" max-width="500" persistent>
                                     <template v-slot:activator="{ props }">
                                         <v-btn class="text-capitalize" size="small" color="primary" prepend-icon="mdi-plus" v-bind="props">Add Schedule</v-btn>
                                     </template>
                                     <template v-slot:default="{ isActive }">
                                         <v-card title="Add a Schedule" prepend-icon="mdi-calendar-plus">
                                             <v-card-text>Add Schedule</v-card-text>
+                                            <v-container>
+                                                <v-form @submit.prevent="addSchedule">
+                                                    <v-text-field :error-messages="schedule_time_error" type="datetime-local" v-model="form.schedule_time" density="compact" label="Schedule" variant="outlined"></v-text-field>
+                                                    <v-btn type="submit" color="primary" class="text-capitalize">Submit</v-btn>
+                                                </v-form>
+                                            </v-container>
                                             <v-card-actions>
                                             <v-spacer></v-spacer>
                                             <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
@@ -108,7 +114,7 @@
 
 <script setup>
 import Appbar from './layouts/Appbar.vue';
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, reactive, onMounted, computed, watch } from 'vue';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
@@ -136,6 +142,50 @@ const headers = [
     { title: 'Actions', value: 'actions', sortable: false, align: 'center' }, // Added actions column
 ];
 
+const schedule_time_error = ref('')
+
+const timer = ref(null)
+
+const form = reactive({
+    schedule_time: ''
+})
+
+const addScheduledialog = ref(false)
+
+const addSchedule = async () => {
+    try {
+        const formData = new FormData();
+        formData.append('schedule_time', form.schedule_time);
+        const token = localStorage.getItem('doctorToken')
+        const response = await axios.post('/api/doctor/schedule', formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        })
+        const clearValidationError = () => {
+            schedule_time_error.value = ''
+        }
+        const setValidationError = () => {
+            clearValidationError()
+            timer.value = setTimeout(() => {
+                schedule_time_error.value = response.data.errors.schedule_time
+            }, 1)
+            setTimeout(() => {
+                clearValidationError();
+            }, 10000);
+        }
+        if (response.data.success) {
+            addScheduledialog.value = false
+            alert('Schedule added')
+        } else {
+            setValidationError()
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 const fetchData = async () => {
     try {
         isLoading.value = true;
@@ -157,20 +207,9 @@ const fetchData = async () => {
                 location.reload();
             }, 3000);
         }
-
     } finally {
         isLoading.value = false;
     }
-};
-
-const formatDate = (dateTime) => {
-    return dayjs(dateTime).format('dddd, MMMM D, YYYY hh:mm A');
-};
-
-// dayjs.extend(localizedFormat)
-
-const formatTime = (time) => {
-    return dayjs(time).format('LT');
 };
 
 const editItem = (item) => {
@@ -192,13 +231,15 @@ const totalResults = computed(() => {
     return data.value.length;
 });
 
+const formatDate = (dateTime) => {
+    return dayjs(dateTime).format('dddd, MMMM D, YYYY hh:mm A');
+};
+
 const filteredData = computed(() => {
-  if (!data.value) return []; // Ensure data is defined before filtering
+    if (!data.value) return [];
     const search = searchQuery.value.toLowerCase();
     return data.value.filter(item =>
-        item.schedule_time.toLowerCase().includes(search)
-        // ||
-        // item.created_at.toLowerCase().includes(search)
+        formatDate(item.schedule_time).toLowerCase().includes(search)
     );
 });
 
