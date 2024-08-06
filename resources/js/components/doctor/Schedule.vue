@@ -93,7 +93,7 @@
                                             <v-container>
                                                 <v-form @submit.prevent="addSchedule">
                                                     <v-text-field :error-messages="schedule_time_error" type="datetime-local" v-model="form.schedule_time" density="compact" label="Schedule" variant="outlined"></v-text-field>
-                                                    <v-btn type="submit" color="primary" class="text-capitalize">Submit</v-btn>
+                                                    <v-btn type="submit" color="primary" class="text-capitalize mt-2">Submit</v-btn>
                                                 </v-form>
                                             </v-container>
                                             <v-card-actions>

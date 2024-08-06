@@ -16,7 +16,7 @@ class ScheduleController extends Controller
     public function index()
     {
         try {
-            $schedule = Schedule::latest()->get();
+            $schedule = Schedule::where('doctor_id', Auth::user()->id)->latest()->get();
             $data = [
                 'success' => true,
                 'data' => $schedule,
@@ -40,7 +40,15 @@ class ScheduleController extends Controller
                 'schedule_time' => str_replace('T', ' ', $request->input('schedule_time'))
             ]);
             $validator = Validator::make($request->all(), [
-                'schedule_time' => 'required|unique:schedules,schedule_time|date_format:Y-m-d H:i',
+                'schedule_time' => [
+                    'required','date_format:Y-m-d H:i', function ($attribute, $value, $fail) use ($request) {
+                        $doctor_id = Auth::user()->id;
+                        $existingSchedule = Schedule::where('schedule_time', $value)->where('doctor_id', $doctor_id)->first();
+                        if ($existingSchedule) {
+                            $fail('You\'ve already selected this schedule time. Try another time.');
+                        }
+                    },
+                ],
             ]);
             if ($validator->fails()) {
                 $response = [
@@ -49,7 +57,6 @@ class ScheduleController extends Controller
                 ];
                 return response()->json($response, 200);
             }
-
             $schedule = Schedule::create([
                 'doctor_id' => Auth::user()->id,
                 'schedule_time' => $request->input('schedule_time'),
