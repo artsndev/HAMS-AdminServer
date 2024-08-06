@@ -21,6 +21,10 @@ class RegisterController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
                 'email' => 'required|unique:doctors|email',
+                'birthdate' => 'required',
+                'specialization' => 'required|string|max:255',
+                'address' => 'required|string|max:255',
+                'phone_number' => 'required|string|max:50',
                 'password' => 'required|min:8|confirmed',
             ]);
             if ($validator->fails()) {
@@ -33,6 +37,10 @@ class RegisterController extends Controller
             $doctor = Doctor::create([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
+                'birthdate' => $request->input('birthdate'),
+                'address' => $request->input('address'),
+                'specialization' => $request->input('specialization'),
+                'phone_number' => $request->input('phone_number'),
                 'password' => Hash::make($request->input('password')),
             ]);
             $doctorToken = JWTAuth::fromUser($doctor);
