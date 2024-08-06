@@ -23,7 +23,7 @@
                             </v-row>
                         </v-form>
                         <div class="text-center">
-                            <p class="text-muted">Doesn't have an account? <RouterLink to="/doctor/register" class="text-decoration-none" color="primary"><span>Register here</span></RouterLink></p>
+                            <p class="text-muted">Doesn't have an account? <RouterLink to="/doctor/register" class="text-decoration-none text-primary"><span>Register here</span></RouterLink></p>
                         </div>
                     </v-card-item>
                 </v-card>
@@ -49,7 +49,6 @@ const password_error = ref('')
 const isLoading = ref(false)
 const showPassword = ref(false)
 const timer = ref(null)
-// const snackbar = ref(false)
 
 const login = async () => {
     try {

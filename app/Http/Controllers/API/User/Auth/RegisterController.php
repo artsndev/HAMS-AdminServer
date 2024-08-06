@@ -19,7 +19,11 @@ class RegisterController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'email' => 'required|unique:users|email',
+                'name' => 'required',
+                'email' => 'required|unique:doctors|email',
+                'birthdate' => 'required',
+                'address' => 'required|string|max:255',
+                'phone_number' => 'required|string|max:50',
                 'password' => 'required|min:8|confirmed',
             ]);
             if ($validator->fails()) {
@@ -32,6 +36,9 @@ class RegisterController extends Controller
             $user = User::create([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
+                'birthdate' => $request->input('birthdate'),
+                'address' => $request->input('address'),
+                'phone_number' => $request->input('phone_number'),
                 'password' => Hash::make($request->input('password')),
             ]);
             $userToken = JWTAuth::fromUser($user);
