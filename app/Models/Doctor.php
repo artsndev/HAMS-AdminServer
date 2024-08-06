@@ -20,6 +20,10 @@ class Doctor extends Authenticatable implements JWTSubject
     protected $fillable = [
         'name',
         'email',
+        'birthdate',
+        'address',
+        'specialization',
+        'phone_number',
         'password',
     ];
 

@@ -93,7 +93,7 @@
                                             <v-container>
                                                 <v-form @submit.prevent="addSchedule">
                                                     <v-text-field :error-messages="schedule_time_error" type="datetime-local" v-model="form.schedule_time" density="compact" label="Schedule" variant="outlined"></v-text-field>
-                                                    <v-btn type="submit" color="primary" class="text-capitalize">Submit</v-btn>
+                                                    <v-btn type="submit" color="primary" class="text-capitalize mt-2">Submit</v-btn>
                                                 </v-form>
                                             </v-container>
                                             <v-card-actions>
@@ -117,7 +117,6 @@ import Appbar from './layouts/Appbar.vue';
 import { ref, reactive, onMounted, computed, watch } from 'vue';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import localizedFormat from 'dayjs/plugin/localizedFormat';
 
 const breadCrumbsItems = ref([
     { title: 'Dashboard', href: '/doctor/dashboard', disabled: false },
@@ -176,7 +175,7 @@ const addSchedule = async () => {
         }
         if (response.data.success) {
             addScheduledialog.value = false
-            alert('Schedule added')
+            fetchData();
         } else {
             setValidationError()
         }
