@@ -48,7 +48,6 @@ class AppointmentController extends Controller
             $validator = Validator::make($request->all(), [
                 'purpose_of_appointment' => 'required',
                 'session_of_appointment' => 'required',
-                // 'status' => 'required',
                 'appointment_time' => 'required|date_format:Y-m-d H:i|unique:appointments,appointment_time',
             ]);
             if ($validator->fails()) {
@@ -89,7 +88,20 @@ class AppointmentController extends Controller
     public function show(string $id)
     {
         try {
-            //code...
+            $appointment = Appointment::with('doctor')->latest()->find($id);
+            if (!$appointment) {
+                $response = [
+                    'success' => false,
+                    'message' => 'Appointment Not Found'
+                ];
+                return response()->json($response, 403);
+            }
+            $response = [
+                'success' => true,
+                'message' => 'Appointments Found',
+                'data' => $appointment,
+            ];
+            return response()->json($response, 200);
         } catch (\Exception $e) {
             $response = [
                 'success' => false,

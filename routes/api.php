@@ -132,6 +132,7 @@ Route::middleware(['auth:user-api'])->group(function () {
     // User Appointment Route
     Route::controller(UserAppointmentController::class)->group(function () {
         Route::get('/user/appointment', 'index');
+        Route::get('/user/appointment/{id}', 'show');
         Route::post('/user/appointment', 'store');
     });
     // User Logout Route
