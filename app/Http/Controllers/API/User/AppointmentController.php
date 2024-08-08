@@ -16,7 +16,7 @@ class AppointmentController extends Controller
     public function index()
     {
         try {
-            $appointment = Appointment::where('id', Auth::user()->id)->get();
+            $appointment = Appointment::with('user','doctor')->where('user_id', Auth::user()->id)->latest()->get();
             if(!$appointment) {
                 $response = [
                     'success' => false,
@@ -49,7 +49,7 @@ class AppointmentController extends Controller
                 'purpose_of_appointment' => 'required',
                 'session_of_appointment' => 'required',
                 // 'status' => 'required',
-                'appointment_time' => 'required|date_format:Y-m-d H:i|unique:appointments,appointment_time',
+                'appointment_time' => 'required|date_format:Y-m-d H:i',
             ]);
             if ($validator->fails()) {
                 $response = [

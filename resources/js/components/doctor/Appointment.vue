@@ -75,15 +75,38 @@
                                     </template>
                                 </v-dialog>
                                 <!-- Edit Dialog -->
-                                <v-dialog v-model="item.editDialog" max-width="500" persistent>
+                                <v-dialog v-model="item.editDialog" max-width="550" persistent>
                                     <template v-slot:activator="{ props }">
                                         <v-btn icon @click="editItem(item)" variant="text" color="warning" v-bind="props">
                                             <v-icon>mdi-pencil</v-icon>
                                         </v-btn>
                                     </template>
                                     <template v-slot:default="{ isActive }">
-                                        <v-card title="Edit Appointment Status" prepend-icon="mdi-calendar-edit">
-                                            <v-card-text>{{ item.user.name }}</v-card-text>
+                                        <v-card title="View Appointment Details" prepend-icon=" mdi-clipboard-text-multiple-outline">
+                                            <v-card-text>
+                                                <v-form>
+                                                    <v-row>
+                                                        <v-col xl="6">
+                                                            <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.name" variant="outlined" label="Patient's Name"></v-text-field>
+                                                        </v-col>
+                                                        <v-col xl="6">
+                                                            <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.email" variant="outlined" label="Patient's Email"></v-text-field>
+                                                        </v-col>
+                                                    </v-row>
+                                                    <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.address" variant="outlined" label="Patient's Address"></v-text-field>
+                                                    <v-row>
+                                                        <v-col xl="6">
+                                                            <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.phone_number" variant="outlined" label="Patient's Phone Number"></v-text-field>
+                                                        </v-col>
+                                                        <v-col xl="6">
+                                                            <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.birthdate" variant="outlined" label="Patient's Birth of Date"></v-text-field>
+                                                        </v-col>
+                                                    </v-row>
+                                                    <v-text-field readonly="true" density="compact" color="primary" :model-value="formatDate(item.appointment_time)" variant="outlined" label="Appointment Schedule"></v-text-field>
+                                                    <v-textarea readonly="true" density="compact" color="primary" :model-value="item.session_of_appointment" variant="outlined" rows="2" label="Session of Appointment"></v-textarea>
+                                                    <v-textarea readonly="true" density="compact" color="primary" :model-value="item.purpose_of_appointment" variant="outlined" rows="2" label="Purpose of Appointment"></v-textarea>
+                                                </v-form>
+                                            </v-card-text>
                                             <v-card-actions>
                                             <v-spacer></v-spacer>
                                             <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
@@ -175,7 +198,6 @@ const fetchData = async () => {
                 location.reload();
             }, 3000);
         }
-
     } finally {
         isLoading.value = false;
     }
