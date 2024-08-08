@@ -123,8 +123,8 @@ const breadCrumbsItems = ref([
     { title: 'Schedule', href: '/doctor/dashboard', disabled: true },
 ]);
 
-const data = ref([]); // Initialize as an empty array
-const searchQuery = ref('');
+const data = ref([]);
+
 const isLoading = ref(false);
 const snackbar = ref(false);
 const text = ref('');
@@ -233,6 +233,8 @@ const totalResults = computed(() => {
 const formatDate = (dateTime) => {
     return dayjs(dateTime).format('dddd, MMMM D, YYYY hh:mm A');
 };
+
+const searchQuery = ref('');
 
 const filteredData = computed(() => {
     if (!data.value) return [];

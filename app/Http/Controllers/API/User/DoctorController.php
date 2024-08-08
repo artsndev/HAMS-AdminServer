@@ -14,7 +14,7 @@ class DoctorController extends Controller
     public function index()
     {
         try {
-            $doctor = Doctor::get();
+            $doctor = Doctor::latest()->get();
             $data = [
                 'success' => true,
                 'message' => 'Doctors Found',
