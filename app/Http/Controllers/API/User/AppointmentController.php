@@ -49,7 +49,7 @@ class AppointmentController extends Controller
                 'purpose_of_appointment' => 'required',
                 'session_of_appointment' => 'required',
                 // 'status' => 'required',
-                'appointment_time' => 'required|date_format:Y-m-d H:i',
+                'appointment_time' => 'required|date_format:Y-m-d H:i|unique:appointments,appointment_time',
             ]);
             if ($validator->fails()) {
                 $response = [
