@@ -75,6 +75,14 @@ const routes = [
         }
     },
     {
+        path: '/doctor/appointment',
+        name: 'Doctor Appointment',
+        component: () => import('../components/doctor/Appointment.vue'),
+        meta: {
+            requiresDoctorAuth: true,
+        }
+    },
+    {
         path: '/doctor/schedule',
         name: 'Doctor Schedule',
         component: () => import('../components/doctor/Schedule.vue'),
