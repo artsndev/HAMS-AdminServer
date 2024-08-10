@@ -12,10 +12,8 @@
                     <template v-slot:title>
                         <span class="font-weight-black" color="blue">{{ item.title }}</span>
                     </template>
-                    <!-- <v-card-title>{{ item.title }}</v-card-title> -->
                     <v-card-text class="py-0 mb-4">
                         <vue-number class="fs-50" v-model="item.number" v-bind="number"></vue-number>
-                        <!-- <v-icon color="blue-darken-4" icon="mdi-chevron-right" class="mt-n10" size="40"></v-icon> -->
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -36,7 +34,6 @@ const breadCrumbsItems = ref([
 const number = {
     decimal: '.',
     separator: ',',
-    // prefix: '$',
     precision: 2,
     masked: false,
 }
@@ -47,8 +44,8 @@ const count_completed_appointments = ref(24)
 
 const cardItems = ref([
     { title: 'Total Schedule', number: count_patients.value},
-    { title: ' Appointments', number: count_appointments.value},
     { title: 'Pending Appointments', number: count_future_appointments.value},
+    { title: 'On Queue Appointments', number: count_appointments.value},
     { title: 'Completed Appointments', number: count_completed_appointments.value},
 ])
 </script>
