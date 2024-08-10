@@ -91,8 +91,8 @@ Route::middleware(['auth:doctor-api'])->group(function () {
     });
     // Doctor Appointment Controller
     Route::controller(DoctorQueuingController::class)->group(function () {
+        Route::get('/doctor/queue', 'index');
         Route::post('/doctor/queue', 'store');
-        // Route::post('/doctor/appointment', 'store');
     });
     // Logout Route
     Route::controller(DoctorLogoutController::class)->group(function () {

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API\Doctor;
 use App\Models\Queue;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +15,19 @@ class QueuingController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $queue = Queue::with('user','appointment')->withTrashed()->latest()->get();
+            $response = [
+                'success' => true,
+                'data' => $queue
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $errors = [
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($errors, 500);
+        }
     }
 
     /**

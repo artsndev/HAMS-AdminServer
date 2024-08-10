@@ -90,6 +90,14 @@ const routes = [
             requiresDoctorAuth: true,
         }
     },
+    {
+        path: '/doctor/queues',
+        name: 'Doctor Queue',
+        component: () => import('../components/doctor/Queue.vue'),
+        meta: {
+            requiresDoctorAuth: true,
+        }
+    },
 ]
 
 const router = createRouter({
