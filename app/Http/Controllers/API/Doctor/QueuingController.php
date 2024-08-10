@@ -36,10 +36,8 @@ class QueuingController extends Controller
     public function store(Request $request)
     {
         try {
-              // Check if the appointment exists
-            $appointmentExists = Appointment::where('id', $request->input('appointment_id'))->exists();
-
-            if (!$appointmentExists) {
+            $appointment = Appointment::findOrFail($request->input('appointment_id'));
+            if (!$appointment) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Appointment not found.',
@@ -50,7 +48,6 @@ class QueuingController extends Controller
                 'appointment_id' => $request->input('appointment_id'),
                 'user_id' => $request->input('user_id')
             ]);
-            $appointment = Appointment::findOrFail($request->input('appointment_id'));
             $appointment->delete();
             $response = [
                 'success' => true,
