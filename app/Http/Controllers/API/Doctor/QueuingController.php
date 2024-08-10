@@ -16,7 +16,12 @@ class QueuingController extends Controller
     public function index()
     {
         try {
-            $queue = Queue::with('user','appointment')->withTrashed()->latest()->get();
+            $queue = Queue::with([
+                'user',
+                'appointment' => function ($query) {
+                    $query->withTrashed();
+                }
+            ])->withTrashed()->latest()->get();
             $response = [
                 'success' => true,
                 'data' => $queue

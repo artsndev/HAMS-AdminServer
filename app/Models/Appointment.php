@@ -52,4 +52,14 @@ class Appointment extends Model
     {
         return $this->belongsTo(Doctor::class,'doctor_id');
     }
+
+    /**
+     *
+     * Define the relationship between User and Appointment models.
+     *
+     */
+    public function queue()
+    {
+        return $this->hasMany(Queue::class,'appointment_id');
+    }
 }

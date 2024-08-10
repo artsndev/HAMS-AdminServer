@@ -16,7 +16,7 @@
                             <v-data-table :headers="headers" loading-text="Loading... Please wait" :items="filteredData" :items-per-page="pagination.rowsPerPage" :page.sync="pagination.page" :server-items-length="totalResults" class="elevation-0" :loading="isLoading">
                             <template v-slot:top>
                                 <v-toolbar flat color="transparent">
-                                    <v-toolbar-title>List of Appointments</v-toolbar-title>
+                                    <v-toolbar-title>List of Queued Appointments</v-toolbar-title>
                                     <v-spacer></v-spacer>
                                     <v-spacer></v-spacer>
                                     <v-text-field rounded color="primary" variant="outlined" v-model="searchQuery"  density="compact" label="Search by Name or Email" single-line hide-details/>
@@ -102,9 +102,9 @@
                                                             <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.birthdate" variant="outlined" label="Patient's Birth of Date"></v-text-field>
                                                         </v-col>
                                                     </v-row>
-                                                    <v-text-field readonly="true" density="compact" color="primary" :model-value="formatDate(item.appointment_time)" variant="outlined" label="Appointment Schedule"></v-text-field>
-                                                    <v-textarea readonly="true" density="compact" color="primary" :model-value="item.session_of_appointment" variant="outlined" rows="2" label="Session of Appointment"></v-textarea>
-                                                    <v-textarea readonly="true" density="compact" color="primary" :model-value="item.purpose_of_appointment" variant="outlined" rows="2" label="Purpose of Appointment"></v-textarea>
+                                                    <v-text-field readonly="true" density="compact" color="primary" :model-value="formatDate(item.appointment.appointment_time)" variant="outlined" label="Appointment Schedule"></v-text-field>
+                                                    <v-textarea readonly="true" density="compact" color="primary" :model-value="item.appointment.session_of_appointment" variant="outlined" rows="2" label="Session of Appointment"></v-textarea>
+                                                    <v-textarea readonly="true" density="compact" color="primary" :model-value="item.appointment.purpose_of_appointment" variant="outlined" rows="2" label="Purpose of Appointment"></v-textarea>
                                                 </v-form>
                                             </v-card-text>
                                             <v-card-actions>
@@ -172,7 +172,7 @@ const headers = [
     { title: 'Email', value: 'user.email', align: 'center' },
     { title: 'Phone Number', value: 'user.phone_number', align: 'center' },
     { title: 'Schedule', value: 'appointment_time', align: 'center' },
-    { title: 'Created', value: 'created_at', align: 'center' },
+    { title: 'Approved', value: 'created_at', align: 'center' },
     { title: 'Actions', value: 'actions', sortable: false, align: 'center' }, // Added actions column
 ];
 
@@ -236,8 +236,8 @@ const filteredData = computed(() => {
     const search = searchQuery.value.toLowerCase();
 
     return data.value.filter(item =>
-        item.appointment_time.toLowerCase().includes(search) ||
-        item.purpose_of_appointment.toLowerCase().includes(search) ||
+        // item.appointment_time.toLowerCase().includes(search) ||
+        // item.purpose_of_appointment.toLowerCase().includes(search) ||
         (item.user && (
             item.user.name.toLowerCase().includes(search) ||
             item.user.email.toLowerCase().includes(search)

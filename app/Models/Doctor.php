@@ -89,4 +89,14 @@ class Doctor extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Appointment::class,'doctor_id');
     }
+
+    /**
+     *
+     * Define the relationship between User and Appointment models.
+     *
+     */
+    public function queue()
+    {
+        return $this->hasMany(Queue::class,'doctor_id');
+    }
 }

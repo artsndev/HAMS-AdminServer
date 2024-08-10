@@ -16,7 +16,7 @@
                             <v-data-table :headers="headers" loading-text="Loading... Please wait" :items="filteredData" :items-per-page="pagination.rowsPerPage" :page.sync="pagination.page" :server-items-length="totalResults" class="elevation-0" :loading="isLoading">
                             <template v-slot:top>
                                 <v-toolbar flat color="transparent">
-                                    <v-toolbar-title>List of Appointments</v-toolbar-title>
+                                    <v-toolbar-title>List of Pending Appointments</v-toolbar-title>
                                     <v-spacer></v-spacer>
                                     <v-spacer></v-spacer>
                                     <v-text-field rounded color="primary" variant="outlined" v-model="searchQuery"  density="compact" label="Search by Name or Email" single-line hide-details/>
