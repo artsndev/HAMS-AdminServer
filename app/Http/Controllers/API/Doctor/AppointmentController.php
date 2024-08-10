@@ -15,7 +15,7 @@ class AppointmentController extends Controller
     public function index()
     {
         try {
-            $appointment = Appointment::with('user')->where('doctor_id', Auth::user()->id)->get();
+            $appointment = Appointment::with('user')->where('doctor_id', Auth::user()->id)->latest()->get();
             $response = [
                 'success' => true,
                 'data' => $appointment

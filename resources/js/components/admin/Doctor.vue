@@ -35,11 +35,40 @@
                                         </v-btn>
                                     </template>
                                     <template v-slot:default="{ isActive }">
-                                        <v-card title="View Doctor's Profile" prepend-icon="mdi-calendar-cursor">
-                                            <v-card-text>{{ item.name }}</v-card-text>
+                                        <v-card title="View Patient's Profile" prepend-icon="mdi-badge-account-horizontal-outline">
+                                            <v-card-text>
+                                                <div class="text-center">
+                                                    <v-avatar size="100" class="mx-auto">
+                                                        <img src="https://randomuser.me/api/portraits/women/85.jpg" alt="Avatar" style="object-fit: cover; width: 100%; height: 100%;">
+                                                    </v-avatar>
+                                                    <h2 class="mx-auto font-weight-regular mt-3">{{ item.name }}</h2>
+                                                    <p class="mx-auto text-grey font-weight-regular">{{ item.email }}</p>
+                                                </div>
+                                                <v-list  nav >
+                                                    <v-list-item>
+                                                        <p class="fs-10 mb-5">Details</p>
+                                                        <v-list-item-title class="font-weight-medium fs-10 mb-2">
+                                                            <v-icon>mdi-at</v-icon>
+                                                            <span class="mx-2">{{ item.email }}</span>
+                                                        </v-list-item-title>
+                                                        <v-list-item-title class="font-weight-medium fs-10 mb-2">
+                                                                <v-icon>mdi-cake-variant-outline</v-icon>
+                                                            <span class="mx-2">{{ item.birthdate }}</span>
+                                                        </v-list-item-title>
+                                                        <v-list-item-title class="font-weight-medium fs-10 mb-2">
+                                                            <v-icon>mdi-phone-outline</v-icon>
+                                                            <span class="mx-2">{{ item.phone_number }}</span>
+                                                        </v-list-item-title>
+                                                        <v-list-item-title class="font-weight-medium fs-10 mb-2">
+                                                            <v-icon>mdi-map-marker-radius-outline</v-icon>
+                                                            <span class="mx-2 text-wrap mb-2">{{ item.address }}</span>
+                                                        </v-list-item-title>
+                                                    </v-list-item>
+                                                </v-list>
+                                            </v-card-text>
                                             <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
+                                                <v-spacer></v-spacer>
+                                                <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
                                             </v-card-actions>
                                         </v-card>
                                     </template>

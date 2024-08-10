@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\API\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class AppointmentController extends Controller
 {
@@ -12,7 +13,19 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $appointment = Appointment::with('user')->latest()->get();
+            $response = [
+                'success' => true,
+                'data' => $appointment
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $errors = [
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($errors, 500);
+        }
     }
 
     /**
