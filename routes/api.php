@@ -32,6 +32,7 @@ Route::middleware(['auth:admin-api'])->group(function () {
     // Admin Data Route
     Route::controller(AdminDashboardController::class)->group(function () {
         Route::get('/admin/data', 'auth');
+        Route::get('/admin/count', 'index');
     });
     Route::controller(AdminAppointmentController::class)->group(function () {
         Route::get('/admin/appointment', 'index');
