@@ -20,7 +20,7 @@ class RegisterController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
-                'email' => 'required|unique:doctors|email',
+                'email' => 'required|unique:users|email',
                 'birthdate' => 'required',
                 'address' => 'required|string|max:255',
                 'phone_number' => 'required|string|max:50',

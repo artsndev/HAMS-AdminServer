@@ -149,7 +149,6 @@ import Appbar from './layouts/Appbar.vue';
 import { ref, onMounted, computed, watch } from 'vue';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import localizedFormat from 'dayjs/plugin/localizedFormat';
 
 const breadCrumbsItems = ref([
     { title: 'Dashboard', href: '/doctor/dashboard', disabled: false },
@@ -233,17 +232,17 @@ const totalResults = computed(() => {
 });
 
 const filteredData = computed(() => {
-  if (!data.value) return []; // Ensure data is defined before filtering
-  const search = searchQuery.value.toLowerCase();
+    if (!data.value) return []; // Ensure data is defined before filtering
+    const search = searchQuery.value.toLowerCase();
 
-  return data.value.filter(item =>
-    item.appointment_time.toLowerCase().includes(search) ||
-    item.purpose_of_appointment.toLowerCase().includes(search) ||
-    (item.user && (
-      item.user.name.toLowerCase().includes(search) ||
-      item.user.email.toLowerCase().includes(search)
-    ))
-  );
+    return data.value.filter(item =>
+        item.appointment_time.toLowerCase().includes(search) ||
+        item.purpose_of_appointment.toLowerCase().includes(search) ||
+        (item.user && (
+            item.user.name.toLowerCase().includes(search) ||
+            item.user.email.toLowerCase().includes(search)
+        ))
+    );
 });
 
 watch([searchQuery, pagination], () => {

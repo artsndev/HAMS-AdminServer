@@ -16,7 +16,7 @@ class AppointmentController extends Controller
     public function index()
     {
         try {
-            $appointment = Appointment::with('user','doctor')->where('user_id', Auth::user()->id)->latest()->get();
+            $appointment = Appointment::with('user','doctor')->withTrashed()->where('user_id', Auth::user()->id)->latest()->get();
             if(!$appointment) {
                 $response = [
                     'success' => false,
@@ -88,7 +88,7 @@ class AppointmentController extends Controller
     public function show(string $id)
     {
         try {
-            $appointment = Appointment::with('doctor')->latest()->find($id);
+            $appointment = Appointment::with('doctor')->withTrashed()->latest()->find($id);
             if (!$appointment) {
                 $response = [
                     'success' => false,
