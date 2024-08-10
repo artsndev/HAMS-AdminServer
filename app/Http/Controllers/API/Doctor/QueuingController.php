@@ -89,6 +89,27 @@ class QueuingController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $queue = Queue::find($id);
+            if ($queue) {
+                $queue->delete();
+                $data = [
+                    'success' => true,
+                    'data' => $queue,
+                    'message' => 'Queued Successfully.',
+                ];
+                return response()->json($data, 200);
+            }
+            $response = [
+                'success' => false,
+                'message' => 'Queue not found',
+            ];
+            return response()->json($response, 404);
+        } catch (\Exception $e) {
+            $errors = [
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($errors, 500);
+        }
     }
 }

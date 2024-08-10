@@ -93,6 +93,7 @@ Route::middleware(['auth:doctor-api'])->group(function () {
     Route::controller(DoctorQueuingController::class)->group(function () {
         Route::get('/doctor/queue', 'index');
         Route::post('/doctor/queue', 'store');
+        Route::delete('/doctor/queue/{id}', 'destroy');
     });
     // Logout Route
     Route::controller(DoctorLogoutController::class)->group(function () {
