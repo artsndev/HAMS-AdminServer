@@ -151,7 +151,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 
 const breadCrumbsItems = ref([
-    { title: 'Dashboard', href: '/doctor/dashboard', disabled: false },
+    { title: 'Admin Dashboard', href: '/admin/dashboard', disabled: false },
     { title: 'Appointment', href: '/doctor/appointment', disabled: true },
 ]);
 

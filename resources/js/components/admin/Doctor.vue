@@ -49,6 +49,10 @@
                                                     <v-list-item>
                                                         <p class="fs-10 mb-5">Details</p>
                                                         <v-list-item-title class="font-weight-medium fs-10 mb-2">
+                                                            <v-icon>mdi-briefcase-variant-outline</v-icon>
+                                                            <span class="mx-2">{{ item.specialization }}</span>
+                                                        </v-list-item-title>
+                                                        <v-list-item-title class="font-weight-medium fs-10 mb-2">
                                                             <v-icon>mdi-at</v-icon>
                                                             <span class="mx-2">{{ item.email }}</span>
                                                         </v-list-item-title>
