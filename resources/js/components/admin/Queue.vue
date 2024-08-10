@@ -16,16 +16,20 @@
                             <v-data-table :headers="headers" loading-text="Loading... Please wait" :items="filteredData" :items-per-page="pagination.rowsPerPage" :page.sync="pagination.page" :server-items-length="totalResults" class="elevation-0" :loading="isLoading">
                             <template v-slot:top>
                                 <v-toolbar flat color="transparent">
-                                    <v-toolbar-title>List of Pending Appointments</v-toolbar-title>
+                                    <v-toolbar-title>List of Queued Appointments</v-toolbar-title>
                                     <v-spacer></v-spacer>
                                     <v-spacer></v-spacer>
                                     <v-text-field rounded color="primary" variant="outlined" v-model="searchQuery"  density="compact" label="Search by Name or Email" single-line hide-details/>
                                 </v-toolbar>
                             </template>
+                            <template v-slot:item.doctor.name="{ item }">{{ item.doctor.name }}</template>
+                            <template v-slot:item.doctor.email="{ item }">{{ item.doctor.email }}</template>
                             <template v-slot:item.user.name="{ item }">{{ item.user.name }}</template>
                             <template v-slot:item.user.email="{ item }">{{ item.user.email }}</template>
-                            <template v-slot:item.user.phone_number="{ item }">{{ item.user.phone_number }}</template>
-                            <template v-slot:item.appointment_time="{ item }">{{ formatDate(item.appointment_time) }}</template>
+                            <template v-slot:item.deleted_at="{ item }">
+                                <v-chip color="success" v-if="item.deleted_at">Queued</v-chip>
+                                <v-chip color="warning" v-else>On Queue</v-chip>
+                            </template>
                             <template v-slot:item.created_at="{ item }">{{ formatDate(item.created_at) }}</template>
                             <template v-slot:item.actions="{ item }">
                                 <!-- View Dialog -->
@@ -87,50 +91,33 @@
                                                 <v-form>
                                                     <v-row>
                                                         <v-col xl="6">
-                                                            <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.name" variant="outlined" label="Patient's Name"></v-text-field>
+                                                            <v-text-field readonly density="compact" color="primary" :model-value="item.user.name" variant="outlined" label="Patient's Name"></v-text-field>
                                                         </v-col>
                                                         <v-col xl="6">
-                                                            <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.email" variant="outlined" label="Patient's Email"></v-text-field>
+                                                            <v-text-field readonly density="compact" color="primary" :model-value="item.user.email" variant="outlined" label="Patient's Email"></v-text-field>
                                                         </v-col>
                                                     </v-row>
-                                                    <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.address" variant="outlined" label="Patient's Address"></v-text-field>
+                                                    <v-text-field readonly density="compact" color="primary" :model-value="item.user.address" variant="outlined" label="Patient's Address"></v-text-field>
                                                     <v-row>
                                                         <v-col xl="6">
-                                                            <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.phone_number" variant="outlined" label="Patient's Phone Number"></v-text-field>
+                                                            <v-text-field readonly density="compact" color="primary" :model-value="item.user.phone_number" variant="outlined" label="Patient's Phone Number"></v-text-field>
                                                         </v-col>
                                                         <v-col xl="6">
-                                                            <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.birthdate" variant="outlined" label="Patient's Birth of Date"></v-text-field>
+                                                            <v-text-field readonly density="compact" color="primary" :model-value="item.user.birthdate" variant="outlined" label="Patient's Birth of Date"></v-text-field>
                                                         </v-col>
                                                     </v-row>
-                                                    <v-text-field readonly="true" density="compact" color="primary" :model-value="formatDate(item.appointment_time)" variant="outlined" label="Appointment Schedule"></v-text-field>
-                                                    <v-textarea readonly="true" density="compact" color="primary" :model-value="item.session_of_appointment" variant="outlined" rows="2" label="Session of Appointment"></v-textarea>
-                                                    <v-textarea readonly="true" density="compact" color="primary" :model-value="item.purpose_of_appointment" variant="outlined" rows="2" label="Purpose of Appointment"></v-textarea>
+                                                    <v-text-field readonly density="compact" color="primary" :model-value="formatDate(item.appointment.appointment_time)" variant="outlined" label="Appointment Schedule"></v-text-field>
+                                                    <v-textarea readonly density="compact" color="primary" :model-value="item.appointment.session_of_appointment" variant="outlined" rows="2" label="Session of Appointment"></v-textarea>
+                                                    <v-textarea readonly density="compact" color="primary" :model-value="item.appointment.purpose_of_appointment" variant="outlined" rows="2" label="Purpose of Appointment"></v-textarea>
                                                 </v-form>
                                             </v-card-text>
                                             <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
+                                                <v-spacer></v-spacer>
+                                                <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
                                             </v-card-actions>
                                         </v-card>
                                     </template>
                                 </v-dialog>
-                                <!-- Remove Dialog -->
-                                <!-- <v-dialog v-model="item.deleteDialog" max-width="500" persistent>
-                                    <template v-slot:activator="{ props }">
-                                        <v-btn icon @click="deleteItem(item)" variant="text" color="red-darken-3" v-bind="props">
-                                            <v-icon>mdi-delete</v-icon>
-                                        </v-btn>
-                                    </template>
-                                    <template v-slot:default="{ isActive }">
-                                        <v-card title="Remove Doctor's Profile" prepend-icon="mdi-calendar-remove">
-                                            <v-card-text>{{ item.user.name }}</v-card-text>
-                                            <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn size="small" class="text-capitalize" text="Close Dialog" @click="isActive.value = false"></v-btn>
-                                            </v-card-actions>
-                                        </v-card>
-                                    </template>
-                                </v-dialog> -->
                             </template>
                             <template v-slot:no-data>
                                 <v-alert type="info" :value="true">No data available</v-alert>
@@ -152,7 +139,7 @@ import dayjs from 'dayjs';
 
 const breadCrumbsItems = ref([
     { title: 'Admin Dashboard', href: '/admin/dashboard', disabled: false },
-    { title: 'Appointment', href: '/doctor/appointment', disabled: true },
+    { title: 'Queue', href: '/doctor/queues', disabled: true },
 ]);
 
 const data = ref([]); // Initialize as an empty array
@@ -168,11 +155,12 @@ const pagination = ref({
 });
 
 const headers = [
-    { title: 'Name', value: 'user.name', align: 'center' },
-    { title: 'Email', value: 'user.email', align: 'center' },
-    { title: 'Phone Number', value: 'user.phone_number', align: 'center' },
-    { title: 'Schedule', value: 'appointment_time', align: 'center' },
-    { title: 'Created', value: 'created_at', align: 'center' },
+    { title: 'Doctor\'s Name', value: 'doctor.name', align: 'center' },
+    { title: 'Doctor\'s Email', value: 'doctor.email', align: 'center' },
+    { title: 'Patient\'s Name', value: 'user.name', align: 'center' },
+    { title: 'Patient\'s Email', value: 'user.email', align: 'center' },
+    { title: 'Status', value: 'deleted_at', align: 'center' },
+    { title: 'Approved', value: 'created_at', align: 'center' },
     { title: 'Actions', value: 'actions', sortable: false, align: 'center' }, // Added actions column
 ];
 
@@ -180,7 +168,7 @@ const fetchData = async () => {
     try {
         isLoading.value = true;
         const token = localStorage.getItem('adminToken');
-        const response = await axios.get('/api/admin/appointment', {
+        const response = await axios.get('/api/admin/queue', {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -206,7 +194,6 @@ const formatDate = (dateTime) => {
     return dayjs(dateTime).format('dddd, MMMM D, YYYY hh:mm A');
 };
 
-// dayjs.extend(localizedFormat)
 
 const formatTime = (time) => {
     return dayjs(time).format('LT');
@@ -222,10 +209,6 @@ const viewItem = (item) => {
   // Implement view functionality here
 };
 
-// const deleteItem = (item) => {
-//     console.log('Delete item:', item);
-// };
-
 const totalResults = computed(() => {
     return data.value.length;
 });
@@ -235,17 +218,15 @@ const filteredData = computed(() => {
     const search = searchQuery.value.toLowerCase();
 
     return data.value.filter(item =>
-        item.appointment_time.toLowerCase().includes(search) ||
-        item.purpose_of_appointment.toLowerCase().includes(search) ||
-        (item.user && (
-            item.user.name.toLowerCase().includes(search) ||
-            item.user.email.toLowerCase().includes(search)
-        ))
+        // item.appointment_time.toLowerCase().includes(search) ||
+        // item.purpose_of_appointment.toLowerCase().includes(search) ||
+        (item.user && (item.user.name.toLowerCase().includes(search) || item.user.email.toLowerCase().includes(search))) ||
+        (item.doctor && (item.doctor.name.toLowerCase().includes(search) || item.doctor.email.toLowerCase().includes(search)))
     );
 });
 
 watch([searchQuery, pagination], () => {
-  pagination.value.page = 1; // Reset to the first page on search
+  pagination.value.page = 1;
 });
 
 onMounted(fetchData);

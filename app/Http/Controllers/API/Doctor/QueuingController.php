@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API\Doctor;
 use App\Models\Queue;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +15,24 @@ class QueuingController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $queue = Queue::with([
+                'user',
+                'appointment' => function ($query) {
+                    $query->withTrashed();
+                }
+            ])->withTrashed()->latest()->get();
+            $response = [
+                'success' => true,
+                'data' => $queue
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $errors = [
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($errors, 500);
+        }
     }
 
     /**
@@ -25,10 +41,8 @@ class QueuingController extends Controller
     public function store(Request $request)
     {
         try {
-              // Check if the appointment exists
-            $appointmentExists = Appointment::where('id', $request->input('appointment_id'))->exists();
-
-            if (!$appointmentExists) {
+            $appointment = Appointment::findOrFail($request->input('appointment_id'));
+            if (!$appointment) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Appointment not found.',
@@ -39,7 +53,6 @@ class QueuingController extends Controller
                 'appointment_id' => $request->input('appointment_id'),
                 'user_id' => $request->input('user_id')
             ]);
-            $appointment = Appointment::findOrFail($request->input('appointment_id'));
             $appointment->delete();
             $response = [
                 'success' => true,
@@ -76,6 +89,27 @@ class QueuingController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $queue = Queue::find($id);
+            if ($queue) {
+                $queue->delete();
+                $data = [
+                    'success' => true,
+                    'data' => $queue,
+                    'message' => 'Queued Successfully.',
+                ];
+                return response()->json($data, 200);
+            }
+            $response = [
+                'success' => false,
+                'message' => 'Queue not found',
+            ];
+            return response()->json($response, 404);
+        } catch (\Exception $e) {
+            $errors = [
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($errors, 500);
+        }
     }
 }

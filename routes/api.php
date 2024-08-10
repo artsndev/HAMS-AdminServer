@@ -16,8 +16,10 @@ Route::controller(UnauthenticatedController::class)->group(function () {
 
 use App\Http\Controllers\API\Admin\Auth\LoginController as AdminLoginController;
 use App\Http\Controllers\API\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\API\Admin\AppointmentController as AdminAppointmentController;
 use App\Http\Controllers\API\Admin\DoctorController as AdminDoctorController;
 use App\Http\Controllers\API\Admin\UserController as AdminUserController;
+use App\Http\Controllers\API\Admin\QueueController as AdminQueuingController;
 use App\Http\Controllers\API\Admin\Auth\LogoutController as AdminLogoutController;
 
 // Admin Login Route
@@ -31,6 +33,9 @@ Route::middleware(['auth:admin-api'])->group(function () {
     Route::controller(AdminDashboardController::class)->group(function () {
         Route::get('/admin/data', 'auth');
     });
+    Route::controller(AdminAppointmentController::class)->group(function () {
+        Route::get('/admin/appointment', 'index');
+    });
     // Admin Doctor Route
     Route::controller(AdminDoctorController::class)->group(function () {
         Route::get('/admin/doctor', 'index');
@@ -42,6 +47,10 @@ Route::middleware(['auth:admin-api'])->group(function () {
         Route::get('/admin/user', 'index');
         Route::put('/admin/user/{id}', 'update');
         Route::delete('/admin/user/{id}', 'destroy');
+    });
+    // Doctor Queuing Controller
+    Route::controller(AdminQueuingController::class)->group(function () {
+        Route::get('/admin/queue', 'index');
     });
     // Logout Route
     Route::controller(AdminLogoutController::class)->group(function () {
@@ -87,12 +96,12 @@ Route::middleware(['auth:doctor-api'])->group(function () {
     // Doctor Appointment Controller
     Route::controller(DoctorAppointmentController::class)->group(function () {
         Route::get('/doctor/appointment', 'index');
-        // Route::post('/doctor/appointment', 'store');
     });
-    // Doctor Appointment Controller
+    // Doctor Queuing Controller
     Route::controller(DoctorQueuingController::class)->group(function () {
+        Route::get('/doctor/queue', 'index');
         Route::post('/doctor/queue', 'store');
-        // Route::post('/doctor/appointment', 'store');
+        Route::delete('/doctor/queue/{id}', 'destroy');
     });
     // Logout Route
     Route::controller(DoctorLogoutController::class)->group(function () {

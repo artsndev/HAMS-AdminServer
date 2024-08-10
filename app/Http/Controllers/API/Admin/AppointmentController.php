@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\API\Doctor;
+namespace App\Http\Controllers\API\Admin;
 
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
@@ -15,7 +14,7 @@ class AppointmentController extends Controller
     public function index()
     {
         try {
-            $appointment = Appointment::with('user')->where('doctor_id', Auth::user()->id)->latest()->get();
+            $appointment = Appointment::with('user')->latest()->get();
             $response = [
                 'success' => true,
                 'data' => $appointment

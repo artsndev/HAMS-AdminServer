@@ -54,6 +54,14 @@ const routes = [
             requiresAdminAuth: true,
         }
     },
+    {
+        path: '/admin/queues',
+        name: 'Admin Queue',
+        component: () => import('../components/admin/Queue.vue'),
+        meta: {
+            requiresAdminAuth: true,
+        }
+    },
 
     // Doctor Web Routes
     {
@@ -86,6 +94,14 @@ const routes = [
         path: '/doctor/schedule',
         name: 'Doctor Schedule',
         component: () => import('../components/doctor/Schedule.vue'),
+        meta: {
+            requiresDoctorAuth: true,
+        }
+    },
+    {
+        path: '/doctor/queues',
+        name: 'Doctor Queue',
+        component: () => import('../components/doctor/Queue.vue'),
         meta: {
             requiresDoctorAuth: true,
         }

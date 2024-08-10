@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\API\Doctor;
+namespace App\Http\Controllers\API\Admin;
 
-use App\Models\Appointment;
+use App\Models\Queue;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 
-class AppointmentController extends Controller
+class QueueController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +14,16 @@ class AppointmentController extends Controller
     public function index()
     {
         try {
-            $appointment = Appointment::with('user')->where('doctor_id', Auth::user()->id)->latest()->get();
+            $queue = Queue::with([
+                'doctor',
+                'user',
+                'appointment' => function ($query) {
+                    $query->withTrashed();
+                }
+            ])->withTrashed()->latest()->get();
             $response = [
                 'success' => true,
-                'data' => $appointment
+                'data' => $queue
             ];
             return response()->json($response, 200);
         } catch (\Exception $e) {

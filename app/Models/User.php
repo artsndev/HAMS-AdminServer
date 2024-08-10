@@ -79,4 +79,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Appointment::class,'user_id');
     }
+
+    /**
+     *
+     * Define the relationship between User and Appointment models.
+     *
+     */
+    public function queue()
+    {
+        return $this->hasMany(Queue::class,'user_id');
+    }
 }

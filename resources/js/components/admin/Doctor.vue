@@ -22,9 +22,10 @@
                                     <v-text-field rounded color="primary" variant="outlined" v-model="searchQuery"  density="compact" label="Search by Name or Email" single-line hide-details/>
                                 </v-toolbar>
                             </template>
-                            <template v-slot:item.date="{ item }">{{ item.name }}</template>
-                            <template v-slot:item.start_time="{ item }">{{ item.email }}</template>
-                            <template v-slot:item.end_time="{ item }">+63 995 8111 348</template>
+                            <template v-slot:item.name="{ item }">{{ item.name }}</template>
+                            <template v-slot:item.email="{ item }">{{ item.email }}</template>
+                            <template v-slot:item.specialization="{ item }">{{ item.specialization }}</template>
+                            <template v-slot:item.phone_number="{ item }">{{ item.phone_number }}</template>
                             <template v-slot:item.created_at="{ item }">{{ formatDate(item.created_at) }}</template>
                             <template v-slot:item.actions="{ item }">
                                 <!-- View Dialog -->
@@ -35,11 +36,44 @@
                                         </v-btn>
                                     </template>
                                     <template v-slot:default="{ isActive }">
-                                        <v-card title="View Doctor's Profile" prepend-icon="mdi-calendar-cursor">
-                                            <v-card-text>{{ item.name }}</v-card-text>
+                                        <v-card title="View Patient's Profile" prepend-icon="mdi-badge-account-horizontal-outline">
+                                            <v-card-text>
+                                                <div class="text-center">
+                                                    <v-avatar size="100" class="mx-auto">
+                                                        <img src="https://randomuser.me/api/portraits/women/85.jpg" alt="Avatar" style="object-fit: cover; width: 100%; height: 100%;">
+                                                    </v-avatar>
+                                                    <h2 class="mx-auto font-weight-regular mt-3">{{ item.name }}</h2>
+                                                    <p class="mx-auto text-grey font-weight-regular">{{ item.email }}</p>
+                                                </div>
+                                                <v-list  nav >
+                                                    <v-list-item>
+                                                        <p class="fs-10 mb-5">Details</p>
+                                                        <v-list-item-title class="font-weight-medium fs-10 mb-2">
+                                                            <v-icon>mdi-briefcase-variant-outline</v-icon>
+                                                            <span class="mx-2">{{ item.specialization }}</span>
+                                                        </v-list-item-title>
+                                                        <v-list-item-title class="font-weight-medium fs-10 mb-2">
+                                                            <v-icon>mdi-at</v-icon>
+                                                            <span class="mx-2">{{ item.email }}</span>
+                                                        </v-list-item-title>
+                                                        <v-list-item-title class="font-weight-medium fs-10 mb-2">
+                                                                <v-icon>mdi-cake-variant-outline</v-icon>
+                                                            <span class="mx-2">{{ item.birthdate }}</span>
+                                                        </v-list-item-title>
+                                                        <v-list-item-title class="font-weight-medium fs-10 mb-2">
+                                                            <v-icon>mdi-phone-outline</v-icon>
+                                                            <span class="mx-2">{{ item.phone_number }}</span>
+                                                        </v-list-item-title>
+                                                        <v-list-item-title class="font-weight-medium fs-10 mb-2">
+                                                            <v-icon>mdi-map-marker-radius-outline</v-icon>
+                                                            <span class="mx-2 text-wrap mb-2">{{ item.address }}</span>
+                                                        </v-list-item-title>
+                                                    </v-list-item>
+                                                </v-list>
+                                            </v-card-text>
                                             <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
+                                                <v-spacer></v-spacer>
+                                                <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
                                             </v-card-actions>
                                         </v-card>
                                     </template>
@@ -118,6 +152,7 @@ const pagination = ref({
 const headers = [
     { title: 'Name', value: 'name', align: 'center' },
     { title: 'Email', value: 'email', align: 'center' },
+    { title: 'Specialization', value: 'specialization', align: 'center' },
     { title: 'Phone Number', value: 'phone_number', align: 'center' },
     { title: 'Joined', value: 'created_at', align: 'center' },
     { title: 'Actions', value: 'actions', sortable: false, align: 'center' }, // Added actions column

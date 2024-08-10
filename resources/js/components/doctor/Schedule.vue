@@ -43,7 +43,7 @@
                                     </template>
                                 </v-dialog>
                                 <!-- Edit Dialog -->
-                                <v-dialog v-model="item.editDialog" max-width="500" persistent>
+                                <!-- <v-dialog v-model="item.editDialog" max-width="500" persistent>
                                     <template v-slot:activator="{ props }">
                                         <v-btn icon @click="editItem(item)" variant="text" color="warning" v-bind="props">
                                             <v-icon>mdi-pencil</v-icon>
@@ -58,7 +58,7 @@
                                             </v-card-actions>
                                         </v-card>
                                     </template>
-                                </v-dialog>
+                                </v-dialog> -->
                                 <!-- Remove Dialog -->
                                 <v-dialog v-model="item.deleteDialog" max-width="500" persistent>
                                     <template v-slot:activator="{ props }">
@@ -211,10 +211,9 @@ const fetchData = async () => {
     }
 };
 
-const editItem = (item) => {
-    console.log('Edit item:', item);
-  // Implement edit functionality here
-};
+// const editItem = (item) => {
+//     console.log('Edit item:', item);
+// };
 
 const viewItem = (item) => {
     console.log('View item:', item);

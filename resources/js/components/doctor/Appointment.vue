@@ -16,7 +16,7 @@
                             <v-data-table :headers="headers" loading-text="Loading... Please wait" :items="filteredData" :items-per-page="pagination.rowsPerPage" :page.sync="pagination.page" :server-items-length="totalResults" class="elevation-0" :loading="isLoading">
                             <template v-slot:top>
                                 <v-toolbar flat color="transparent">
-                                    <v-toolbar-title>List of Appointments</v-toolbar-title>
+                                    <v-toolbar-title>List of Pending Appointments</v-toolbar-title>
                                     <v-spacer></v-spacer>
                                     <v-spacer></v-spacer>
                                     <v-text-field rounded color="primary" variant="outlined" v-model="searchQuery"  density="compact" label="Search by Name or Email" single-line hide-details/>
@@ -115,7 +115,7 @@
                                     </template>
                                 </v-dialog>
                                 <!-- Remove Dialog -->
-                                <v-dialog v-model="item.deleteDialog" max-width="500" persistent>
+                                <!-- <v-dialog v-model="item.deleteDialog" max-width="500" persistent>
                                     <template v-slot:activator="{ props }">
                                         <v-btn icon @click="deleteItem(item)" variant="text" color="red-darken-3" v-bind="props">
                                             <v-icon>mdi-delete</v-icon>
@@ -130,7 +130,7 @@
                                             </v-card-actions>
                                         </v-card>
                                     </template>
-                                </v-dialog>
+                                </v-dialog> -->
                             </template>
                             <template v-slot:no-data>
                                 <v-alert type="info" :value="true">No data available</v-alert>
@@ -222,10 +222,9 @@ const viewItem = (item) => {
   // Implement view functionality here
 };
 
-const deleteItem = (item) => {
-    console.log('Delete item:', item);
-  // Implement delete functionality here
-};
+// const deleteItem = (item) => {
+//     console.log('Delete item:', item);
+// };
 
 const totalResults = computed(() => {
     return data.value.length;

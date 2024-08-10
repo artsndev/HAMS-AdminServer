@@ -16,7 +16,7 @@
                             <v-data-table :headers="headers" loading-text="Loading... Please wait" :items="filteredData" :items-per-page="pagination.rowsPerPage" :page.sync="pagination.page" :server-items-length="totalResults" class="elevation-0" :loading="isLoading">
                             <template v-slot:top>
                                 <v-toolbar flat color="transparent">
-                                    <v-toolbar-title>List of Pending Appointments</v-toolbar-title>
+                                    <v-toolbar-title>List of Queued Appointments</v-toolbar-title>
                                     <v-spacer></v-spacer>
                                     <v-spacer></v-spacer>
                                     <v-text-field rounded color="primary" variant="outlined" v-model="searchQuery"  density="compact" label="Search by Name or Email" single-line hide-details/>
@@ -26,6 +26,10 @@
                             <template v-slot:item.user.email="{ item }">{{ item.user.email }}</template>
                             <template v-slot:item.user.phone_number="{ item }">{{ item.user.phone_number }}</template>
                             <template v-slot:item.appointment_time="{ item }">{{ formatDate(item.appointment_time) }}</template>
+                            <template v-slot:item.deleted_at="{ item }">
+                                <v-chip color="success" v-if="item.deleted_at">Queued</v-chip>
+                                <v-chip color="warning" v-else>On Queue</v-chip>
+                            </template>
                             <template v-slot:item.created_at="{ item }">{{ formatDate(item.created_at) }}</template>
                             <template v-slot:item.actions="{ item }">
                                 <!-- View Dialog -->
@@ -87,29 +91,35 @@
                                                 <v-form>
                                                     <v-row>
                                                         <v-col xl="6">
-                                                            <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.name" variant="outlined" label="Patient's Name"></v-text-field>
+                                                            <v-text-field readonly density="compact" color="primary" :model-value="item.user.name" variant="outlined" label="Patient's Name"></v-text-field>
                                                         </v-col>
                                                         <v-col xl="6">
-                                                            <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.email" variant="outlined" label="Patient's Email"></v-text-field>
+                                                            <v-text-field readonly density="compact" color="primary" :model-value="item.user.email" variant="outlined" label="Patient's Email"></v-text-field>
                                                         </v-col>
                                                     </v-row>
-                                                    <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.address" variant="outlined" label="Patient's Address"></v-text-field>
+                                                    <v-text-field readonly density="compact" color="primary" :model-value="item.user.address" variant="outlined" label="Patient's Address"></v-text-field>
                                                     <v-row>
                                                         <v-col xl="6">
-                                                            <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.phone_number" variant="outlined" label="Patient's Phone Number"></v-text-field>
+                                                            <v-text-field readonly density="compact" color="primary" :model-value="item.user.phone_number" variant="outlined" label="Patient's Phone Number"></v-text-field>
                                                         </v-col>
                                                         <v-col xl="6">
-                                                            <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.birthdate" variant="outlined" label="Patient's Birth of Date"></v-text-field>
+                                                            <v-text-field readonly density="compact" color="primary" :model-value="item.user.birthdate" variant="outlined" label="Patient's Birth of Date"></v-text-field>
                                                         </v-col>
                                                     </v-row>
-                                                    <v-text-field readonly="true" density="compact" color="primary" :model-value="formatDate(item.appointment_time)" variant="outlined" label="Appointment Schedule"></v-text-field>
-                                                    <v-textarea readonly="true" density="compact" color="primary" :model-value="item.session_of_appointment" variant="outlined" rows="2" label="Session of Appointment"></v-textarea>
-                                                    <v-textarea readonly="true" density="compact" color="primary" :model-value="item.purpose_of_appointment" variant="outlined" rows="2" label="Purpose of Appointment"></v-textarea>
+                                                    <v-text-field readonly density="compact" color="primary" :model-value="formatDate(item.appointment.appointment_time)" variant="outlined" label="Appointment Schedule"></v-text-field>
+                                                    <v-textarea readonly density="compact" color="primary" :model-value="item.appointment.session_of_appointment" variant="outlined" rows="2" label="Session of Appointment"></v-textarea>
+                                                    <v-textarea readonly density="compact" color="primary" :model-value="item.appointment.purpose_of_appointment" variant="outlined" rows="2" label="Purpose of Appointment"></v-textarea>
                                                 </v-form>
                                             </v-card-text>
                                             <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
+                                                <v-spacer></v-spacer>
+                                                <template v-if="item.deleted_at">
+                                                    <v-btn  text="Marked as Done" color="success"  @click="isActive.value = false" variant="outlined"></v-btn>
+                                                </template>
+                                                <template v-else>
+                                                    <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
+                                                    <v-btn text="Mark as Done" @click="markDone(item.id)" color="primary" variant="flat"></v-btn>
+                                                </template>
                                             </v-card-actions>
                                         </v-card>
                                     </template>
@@ -151,8 +161,8 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 
 const breadCrumbsItems = ref([
-    { title: 'Admin Dashboard', href: '/admin/dashboard', disabled: false },
-    { title: 'Appointment', href: '/doctor/appointment', disabled: true },
+    { title: 'Dashboard', href: '/doctor/dashboard', disabled: false },
+    { title: 'Queue', href: '/doctor/queues', disabled: true },
 ]);
 
 const data = ref([]); // Initialize as an empty array
@@ -171,16 +181,17 @@ const headers = [
     { title: 'Name', value: 'user.name', align: 'center' },
     { title: 'Email', value: 'user.email', align: 'center' },
     { title: 'Phone Number', value: 'user.phone_number', align: 'center' },
+    { title: 'Status', value: 'deleted_at', align: 'center' },
     { title: 'Schedule', value: 'appointment_time', align: 'center' },
-    { title: 'Created', value: 'created_at', align: 'center' },
+    { title: 'Approved', value: 'created_at', align: 'center' },
     { title: 'Actions', value: 'actions', sortable: false, align: 'center' }, // Added actions column
 ];
 
 const fetchData = async () => {
     try {
         isLoading.value = true;
-        const token = localStorage.getItem('adminToken');
-        const response = await axios.get('/api/admin/appointment', {
+        const token = localStorage.getItem('doctorToken');
+        const response = await axios.get('/api/doctor/queue', {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -192,7 +203,7 @@ const fetchData = async () => {
         if (error.response && error.response.status === 401) {
             snackbar.value = true;
             text.value = 'Error fetching your data. Please try again.';
-            localStorage.removeItem('adminToken');
+            localStorage.removeItem('doctorToken');
             setTimeout(() => {
                 location.reload();
             }, 3000);
@@ -206,7 +217,6 @@ const formatDate = (dateTime) => {
     return dayjs(dateTime).format('dddd, MMMM D, YYYY hh:mm A');
 };
 
-// dayjs.extend(localizedFormat)
 
 const formatTime = (time) => {
     return dayjs(time).format('LT');
@@ -223,8 +233,22 @@ const viewItem = (item) => {
 };
 
 // const deleteItem = (item) => {
-//     console.log('Delete item:', item);
-// };
+//     console.log('Delete item:', item)
+// }
+
+const markDone = async (id) => {
+    try {
+        const token = localStorage.getItem('doctorToken');
+        const response = await axios.delete('/api/doctor/queue/' + id, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        fetchData()
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 const totalResults = computed(() => {
     return data.value.length;
@@ -235,8 +259,8 @@ const filteredData = computed(() => {
     const search = searchQuery.value.toLowerCase();
 
     return data.value.filter(item =>
-        item.appointment_time.toLowerCase().includes(search) ||
-        item.purpose_of_appointment.toLowerCase().includes(search) ||
+        // item.appointment_time.toLowerCase().includes(search) ||
+        // item.purpose_of_appointment.toLowerCase().includes(search) ||
         (item.user && (
             item.user.name.toLowerCase().includes(search) ||
             item.user.email.toLowerCase().includes(search)
