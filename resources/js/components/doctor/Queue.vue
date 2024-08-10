@@ -125,7 +125,7 @@
                                     </template>
                                 </v-dialog>
                                 <!-- Remove Dialog -->
-                                <v-dialog v-model="item.deleteDialog" max-width="500" persistent>
+                                <!-- <v-dialog v-model="item.deleteDialog" max-width="500" persistent>
                                     <template v-slot:activator="{ props }">
                                         <v-btn icon @click="deleteItem(item)" variant="text" color="red-darken-3" v-bind="props">
                                             <v-icon>mdi-delete</v-icon>
@@ -140,7 +140,7 @@
                                             </v-card-actions>
                                         </v-card>
                                     </template>
-                                </v-dialog>
+                                </v-dialog> -->
                             </template>
                             <template v-slot:no-data>
                                 <v-alert type="info" :value="true">No data available</v-alert>
@@ -232,10 +232,9 @@ const viewItem = (item) => {
   // Implement view functionality here
 };
 
-const deleteItem = (item) => {
-    console.log('Delete item:', item);
-  // Implement delete functionality here
-};
+// const deleteItem = (item) => {
+//     console.log('Delete item:', item)
+// }
 
 const markDone = async (id) => {
     try {
