@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\API\Doctor;
 
-use App\Http\Controllers\Controller;
+use App\Models\Queue;
+use App\Models\Schedule;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
@@ -22,7 +25,26 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $schedule = Schedule::get()->count();
+            $appointment = Appointment::get()->count();
+            $queue = Queue::get()->count();
+            $queued = Queue::onlyTrashed()->get()->count();
+            $response = [
+                'data' => [
+                    'schedule_count' => $schedule,
+                    'appointment_count' => $appointment,
+                    'queue_count' => $queue,
+                    'queued_count' => $queued,
+                ]
+            ];
+            return response()->json($response,200);
+        } catch (\Exception $e) {
+            $errors = [
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($errors, 500);
+        }
     }
 
     /**

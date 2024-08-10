@@ -38,6 +38,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('doctor_id')->constrained()->onDelete('cascade');
             $table->dateTime('schedule_time');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
