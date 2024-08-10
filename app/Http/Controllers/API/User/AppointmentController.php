@@ -99,7 +99,12 @@ class AppointmentController extends Controller
     public function show(string $id)
     {
         try {
-            $appointment = Appointment::with('doctor')->withTrashed()->latest()->find($id);
+            $appointment = Appointment::with([
+                'doctor',
+                'queue' => function ($query) {
+                    $query->withTrashed();
+                }
+            ])->withTrashed()->latest()->find($id);
             if (!$appointment) {
                 $response = [
                     'success' => false,

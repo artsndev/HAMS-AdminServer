@@ -71,6 +71,6 @@ class Appointment extends Model
      */
     public function queue()
     {
-        return $this->hasMany(Queue::class,'appointment_id');
+        return $this->hasOne(Queue::class,'appointment_id');
     }
 }
