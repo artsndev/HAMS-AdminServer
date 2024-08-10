@@ -18,6 +18,7 @@ class Appointment extends Model
     protected $fillable = [
         'user_id',
         'doctor_id',
+        'schedule_id',
         'purpose_of_appointment',
         'session_of_appointment',
         'appointment_time',
@@ -51,6 +52,16 @@ class Appointment extends Model
     public function doctor()
     {
         return $this->belongsTo(Doctor::class,'doctor_id');
+    }
+
+    /**
+     *
+     * Define the relationship between User and Appointment models.
+     *
+     */
+    public function schedule()
+    {
+        return $this->hasMany(Schedule::class,'schedule_id');
     }
 
     /**
