@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\API\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Queue;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class QueueController extends Controller
 {
@@ -12,7 +13,25 @@ class QueueController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $queue = Queue::with([
+                'doctor',
+                'user',
+                'appointment' => function ($query) {
+                    $query->withTrashed();
+                }
+            ])->withTrashed()->latest()->get();
+            $response = [
+                'success' => true,
+                'data' => $queue
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $errors = [
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($errors, 500);
+        }
     }
 
     /**

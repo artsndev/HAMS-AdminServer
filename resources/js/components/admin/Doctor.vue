@@ -22,9 +22,10 @@
                                     <v-text-field rounded color="primary" variant="outlined" v-model="searchQuery"  density="compact" label="Search by Name or Email" single-line hide-details/>
                                 </v-toolbar>
                             </template>
-                            <template v-slot:item.date="{ item }">{{ item.name }}</template>
-                            <template v-slot:item.start_time="{ item }">{{ item.email }}</template>
-                            <template v-slot:item.end_time="{ item }">+63 995 8111 348</template>
+                            <template v-slot:item.name="{ item }">{{ item.name }}</template>
+                            <template v-slot:item.email="{ item }">{{ item.email }}</template>
+                            <template v-slot:item.specialization="{ item }">{{ item.specialization }}</template>
+                            <template v-slot:item.phone_number="{ item }">{{ item.phone_number }}</template>
                             <template v-slot:item.created_at="{ item }">{{ formatDate(item.created_at) }}</template>
                             <template v-slot:item.actions="{ item }">
                                 <!-- View Dialog -->
@@ -147,6 +148,7 @@ const pagination = ref({
 const headers = [
     { title: 'Name', value: 'name', align: 'center' },
     { title: 'Email', value: 'email', align: 'center' },
+    { title: 'Specialization', value: 'specialization', align: 'center' },
     { title: 'Phone Number', value: 'phone_number', align: 'center' },
     { title: 'Joined', value: 'created_at', align: 'center' },
     { title: 'Actions', value: 'actions', sortable: false, align: 'center' }, // Added actions column
