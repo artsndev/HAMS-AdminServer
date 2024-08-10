@@ -39,4 +39,14 @@ class Schedule extends Model
     {
         return $this->belongsTo(Doctor::class,'doctor_id');
     }
+
+    /**
+     *
+     * Define the relationship between Doctor and Schedule models.
+     *
+     */
+    public function appointment()
+    {
+        return $this->belongsTo(Appointment::class,'schedule_id');
+    }
 }
