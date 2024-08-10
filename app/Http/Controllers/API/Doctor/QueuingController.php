@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Doctor;
 use App\Models\Queue;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,12 +25,20 @@ class QueuingController extends Controller
     public function store(Request $request)
     {
         try {
+              // Check if the appointment exists
+            $appointmentExists = Appointment::where('id', $request->input('appointment_id'))->exists();
+
+            if (!$appointmentExists) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Appointment not found.',
+                ], 404);
+            }
             $queue = Queue::create([
                 'doctor_id' => Auth::user()->id,
                 'appointment_id' => $request->input('appointment_id'),
                 'user_id' => $request->input('user_id')
             ]);
-
             $appointment = Appointment::findOrFail($request->input('appointment_id'));
             $appointment->delete();
             $response = [

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('purpose_of_appointment');
             $table->string('session_of_appointment');
             $table->dateTime('appointment_time');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
