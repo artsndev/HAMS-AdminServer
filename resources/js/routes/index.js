@@ -54,6 +54,14 @@ const routes = [
             requiresAdminAuth: true,
         }
     },
+    {
+        path: '/admin/queues',
+        name: 'Admin Queue',
+        component: () => import('../components/admin/Queue.vue'),
+        meta: {
+            requiresAdminAuth: true,
+        }
+    },
 
     // Doctor Web Routes
     {
