@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('doctor_id')->constrained('doctors')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('appointment_id')->constrained('appointments')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('status')->default('pending');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

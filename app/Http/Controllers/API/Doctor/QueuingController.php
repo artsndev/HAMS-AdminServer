@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\API\Doctor;
 
-use App\Http\Controllers\Controller;
+use App\Models\Queue;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class QueuingController extends Controller
 {
@@ -20,7 +23,27 @@ class QueuingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $queue = Queue::create([
+                'doctor_id' => Auth::user()->id,
+                'appointment_id' => $request->input('appointment_id'),
+                'user_id' => $request->input('user_id')
+            ]);
+
+            $appointment = Appointment::findOrFail($request->input('appointment_id'));
+            $appointment->delete();
+            $response = [
+                'success' => true,
+                'message' => "Queued Successfully",
+                'data' => $queue,
+            ];
+            return response()->json($response, 201);
+        } catch (\Exception $e) {
+            $errors = [
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($errors, 500);
+        }
     }
 
     /**

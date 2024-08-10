@@ -149,7 +149,6 @@ import Appbar from './layouts/Appbar.vue';
 import { ref, onMounted, computed, watch } from 'vue';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import localizedFormat from 'dayjs/plugin/localizedFormat';
 
 const breadCrumbsItems = ref([
     { title: 'Dashboard', href: '/doctor/dashboard', disabled: false },
