@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API\User;
 
+use App\Models\Schedule;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
+use App\Mail\User\AppointmentMail;
 use App\Http\Controllers\Controller;
-use App\Models\Schedule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class AppointmentController extends Controller
@@ -83,6 +85,8 @@ class AppointmentController extends Controller
                 ],
                 'message' => "User Appointment successfully",
             ];
+            // Send an Email to Doctor when appointment is created
+            $mail = Mail::to($appointment->doctor->email)->send(new AppointmentMail($appointment));
             return response()->json($response, 201);
         } catch (\Exception $e) {
             $response = [
