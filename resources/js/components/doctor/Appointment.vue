@@ -111,7 +111,7 @@
                                                 <v-spacer></v-spacer>
                                                 <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
                                                 <v-form @submit.prevent="markAsDone(item)">
-                                                    <v-btn type="submit" :loading="isLoad" text="Mark Done" color="primary">Mark Done</v-btn>
+                                                    <v-btn type="submit" :loading="isLoading" text="Accept Request" color="primary"></v-btn>
                                                 </v-form>
                                             </v-card-actions>
                                         </v-card>
@@ -127,6 +127,10 @@
                 </v-col>
             </v-row>
         </v-container>
+        <v-snackbar :timeout="5000" v-model="snackbar" color="success">
+            <v-icon icon="mdi-check" class="px-2"></v-icon>
+            {{ text }}
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -191,11 +195,10 @@ const form = reactive({
     user_id: '',
     appointment_id: '',
 });
-const isLoad = ref(false)
 // Correctly pass item to markAsDone and handle the request
 const markAsDone = async (item) => {
     try {
-        isLoad.value = true
+        isLoading.value = true
         const formData = new FormData();
         formData.append('user_id', item.user.id);
         formData.append('appointment_id', item.id);
@@ -206,10 +209,12 @@ const markAsDone = async (item) => {
             },
         });
         fetchData();
+        snackbar.value = true
+        text.value = "Request accepted and queued successfully."
     } catch (error) {
         console.error('Error marking as done:', error);
     } finally {
-        isLoad.value = false
+        isLoading.value = false
     }
 };
 

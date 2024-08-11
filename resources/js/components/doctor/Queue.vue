@@ -114,11 +114,11 @@
                                             <v-card-actions>
                                                 <v-spacer></v-spacer>
                                                 <template v-if="item.deleted_at">
-                                                    <v-btn  text="Marked as Done" color="success"  @click="isActive.value = false" variant="outlined"></v-btn>
+                                                    <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
                                                 </template>
                                                 <template v-else>
                                                     <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
-                                                    <v-btn text="Mark as Done" @click="markDone(item.id)" color="primary" variant="flat"></v-btn>
+                                                    <v-btn text="Mark as Done" :loading="isLoading" @click="markDone(item.id)" color="primary" variant="flat"></v-btn>
                                                 </template>
                                             </v-card-actions>
                                         </v-card>
@@ -151,6 +151,10 @@
                 </v-col>
             </v-row>
         </v-container>
+        <v-snackbar :timeout="5000" v-model="snackbar" color="success">
+            <v-icon icon="mdi-check" class="px-2"></v-icon>
+            {{ text }}
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -238,15 +242,20 @@ const viewItem = (item) => {
 
 const markDone = async (id) => {
     try {
+        isLoading.value = true
         const token = localStorage.getItem('doctorToken');
         const response = await axios.delete('/api/doctor/queue/' + id, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
+        snackbar.value = true
+        text.value = 'Queued Successfully'
         fetchData()
     } catch (error) {
         console.log(error)
+    } finally {
+        isLoading.value = false
     }
 }
 

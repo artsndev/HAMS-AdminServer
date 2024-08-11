@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Doctor;
 use App\Models\Queue;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
+use App\Mail\Doctor\QueuedMail;
 use App\Mail\Doctor\QueuingMail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -102,6 +103,7 @@ class QueuingController extends Controller
                     'data' => $queue,
                     'message' => 'Queued Successfully.',
                 ];
+                $mail = Mail::to($queue->user->email)->send(new QueuedMail($queue));
                 return response()->json($data, 200);
             }
             $response = [
