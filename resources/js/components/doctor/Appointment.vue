@@ -111,8 +111,6 @@
                                                 <v-spacer></v-spacer>
                                                 <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
                                                 <v-form @submit.prevent="markAsDone(item)">
-                                                    <!-- <v-text-field class="d-none" v-model="form.user_id" :value="item.user.id"></v-text-field> -->
-                                                    <!-- <v-text-field class="d-none" v-model="form.appointment_id" :value="item.id"></v-text-field> -->
                                                     <v-btn type="submit" :loading="isLoad" text="Mark Done" color="primary">Mark Done</v-btn>
                                                 </v-form>
                                             </v-card-actions>
