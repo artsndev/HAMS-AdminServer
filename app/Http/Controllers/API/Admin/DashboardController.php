@@ -40,8 +40,11 @@ class DashboardController extends Controller
                 ]
             ];
             return response()->json($response,200);
-        } catch (\Throwable $th) {
-            //throw $th;
+        } catch (\Exception $e) {
+            $errors = [
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($errors, 500);
         }
     }
 
