@@ -2,7 +2,6 @@
 
 namespace App\Mail\Doctor;
 
-use App\Models\Queue;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -10,16 +9,16 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class QueuingMail extends Mailable
+class QueuedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(public Queue $queuing)
+    public function __construct()
     {
-        $this->queuing = $queuing;
+        //
     }
 
     /**
@@ -28,7 +27,7 @@ class QueuingMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'On Queue Mail',
+            subject: 'Queued Mail',
         );
     }
 
@@ -38,7 +37,7 @@ class QueuingMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.doctor.QueuingMail',
+            view: 'view.name',
         );
     }
 

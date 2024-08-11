@@ -5,8 +5,10 @@ namespace App\Http\Controllers\API\Doctor;
 use App\Models\Queue;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
+use App\Mail\Doctor\QueuingMail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class QueuingController extends Controller
 {
@@ -60,6 +62,7 @@ class QueuingController extends Controller
                 'data' => $queue,
             ];
             // Send an Email to User
+            $mail = Mail::to($queue->user->email)->send(new QueuingMail($queue));
             return response()->json($response, 201);
         } catch (\Exception $e) {
             $errors = [
