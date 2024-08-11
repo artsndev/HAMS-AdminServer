@@ -87,50 +87,38 @@
                                                 <v-form>
                                                     <v-row>
                                                         <v-col xl="6">
-                                                            <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.name" variant="outlined" label="Patient's Name"></v-text-field>
+                                                            <v-text-field readonly density="compact" color="primary" :model-value="item.user.name" variant="outlined" label="Patient's Name"></v-text-field>
                                                         </v-col>
                                                         <v-col xl="6">
-                                                            <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.email" variant="outlined" label="Patient's Email"></v-text-field>
+                                                            <v-text-field readonly density="compact" color="primary" :model-value="item.user.email" variant="outlined" label="Patient's Email"></v-text-field>
                                                         </v-col>
                                                     </v-row>
-                                                    <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.address" variant="outlined" label="Patient's Address"></v-text-field>
+                                                    <v-text-field readonly density="compact" color="primary" :model-value="item.user.address" variant="outlined" label="Patient's Address"></v-text-field>
                                                     <v-row>
                                                         <v-col xl="6">
-                                                            <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.phone_number" variant="outlined" label="Patient's Phone Number"></v-text-field>
+                                                            <v-text-field readonly density="compact" color="primary" :model-value="item.user.phone_number" variant="outlined" label="Patient's Phone Number"></v-text-field>
                                                         </v-col>
                                                         <v-col xl="6">
-                                                            <v-text-field readonly="true" density="compact" color="primary" :model-value="item.user.birthdate" variant="outlined" label="Patient's Birth of Date"></v-text-field>
+                                                            <v-text-field readonly density="compact" color="primary" :model-value="item.user.birthdate" variant="outlined" label="Patient's Birth of Date"></v-text-field>
                                                         </v-col>
                                                     </v-row>
-                                                    <v-text-field readonly="true" density="compact" color="primary" :model-value="formatDate(item.appointment_time)" variant="outlined" label="Appointment Schedule"></v-text-field>
-                                                    <v-textarea readonly="true" density="compact" color="primary" :model-value="item.session_of_appointment" variant="outlined" rows="2" label="Session of Appointment"></v-textarea>
-                                                    <v-textarea readonly="true" density="compact" color="primary" :model-value="item.purpose_of_appointment" variant="outlined" rows="2" label="Purpose of Appointment"></v-textarea>
+                                                    <v-text-field readonly density="compact" color="primary" :model-value="formatDate(item.appointment_time)" variant="outlined" label="Appointment Schedule"></v-text-field>
+                                                    <v-textarea readonly density="compact" color="primary" :model-value="item.session_of_appointment" variant="outlined" rows="2" label="Session of Appointment"></v-textarea>
+                                                    <v-textarea readonly density="compact" color="primary" :model-value="item.purpose_of_appointment" variant="outlined" rows="2" label="Purpose of Appointment"></v-textarea>
                                                 </v-form>
                                             </v-card-text>
                                             <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
+                                                <v-spacer></v-spacer>
+                                                <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
+                                                <v-form @submit.prevent="markAsDone(item)">
+                                                    <!-- <v-text-field class="d-none" v-model="form.user_id" :value="item.user.id"></v-text-field> -->
+                                                    <!-- <v-text-field class="d-none" v-model="form.appointment_id" :value="item.id"></v-text-field> -->
+                                                    <v-btn type="submit" :loading="isLoad" text="Mark Done" color="primary">Mark Done</v-btn>
+                                                </v-form>
                                             </v-card-actions>
                                         </v-card>
                                     </template>
                                 </v-dialog>
-                                <!-- Remove Dialog -->
-                                <!-- <v-dialog v-model="item.deleteDialog" max-width="500" persistent>
-                                    <template v-slot:activator="{ props }">
-                                        <v-btn icon @click="deleteItem(item)" variant="text" color="red-darken-3" v-bind="props">
-                                            <v-icon>mdi-delete</v-icon>
-                                        </v-btn>
-                                    </template>
-                                    <template v-slot:default="{ isActive }">
-                                        <v-card title="Remove Doctor's Profile" prepend-icon="mdi-calendar-remove">
-                                            <v-card-text>{{ item.user.name }}</v-card-text>
-                                            <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn size="small" class="text-capitalize" text="Close Dialog" @click="isActive.value = false"></v-btn>
-                                            </v-card-actions>
-                                        </v-card>
-                                    </template>
-                                </v-dialog> -->
                             </template>
                             <template v-slot:no-data>
                                 <v-alert type="info" :value="true">No data available</v-alert>
@@ -146,7 +134,7 @@
 
 <script setup>
 import Appbar from './layouts/Appbar.vue';
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, computed, watch, reactive } from 'vue';
 import axios from 'axios';
 import dayjs from 'dayjs';
 
@@ -186,7 +174,6 @@ const fetchData = async () => {
             },
         });
         data.value = response.data.data
-        console.log(data.value)
     } catch (error) {
         console.error('Error fetching data:', error);
         if (error.response && error.response.status === 401) {
@@ -199,6 +186,32 @@ const fetchData = async () => {
         }
     } finally {
         isLoading.value = false;
+    }
+};
+
+const form = reactive({
+    user_id: '',
+    appointment_id: '',
+});
+const isLoad = ref(false)
+// Correctly pass item to markAsDone and handle the request
+const markAsDone = async (item) => {
+    try {
+        isLoad.value = true
+        const formData = new FormData();
+        formData.append('user_id', item.user.id);
+        formData.append('appointment_id', item.id);
+        const token = localStorage.getItem('doctorToken');
+        const response = await axios.post('/api/doctor/queue', formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        fetchData();
+    } catch (error) {
+        console.error('Error marking as done:', error);
+    } finally {
+        isLoad.value = false
     }
 };
 
