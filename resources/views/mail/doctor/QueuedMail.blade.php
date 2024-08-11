@@ -328,7 +328,7 @@
                                     <td class="content-cell">
                                         <table class="inner-body" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
                                             <h1>Greetings, {{ $queuing->user->name }} </h1>
-                                            <p class="" style="font-size: 16px;">{{ __('Your appointment request is now On Queue.') }}</p>
+                                            <p class="" style="font-size: 16px;">{{ __('Your appointment request is now Queued Successfully.') }}</p>
                                             {{-- <h1 class="text-center">{{ $client->queuing_number }} </h1> --}}
                                             <p>{{ __('Thank you for using our Health Management System🚀') }}</p>
                                         </table>
