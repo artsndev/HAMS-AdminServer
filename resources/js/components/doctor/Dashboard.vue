@@ -27,6 +27,7 @@
                             <v-toolbar flat color="transparent">
                                 <v-toolbar-title>My Schedule</v-toolbar-title>
                                 <v-spacer></v-spacer>
+                                <v-spacer></v-spacer>
                                 <v-text-field rounded color="primary" variant="outlined" v-model="searchQuery"  density="compact" label="Search by Time, Date and Year at Schedule Time" single-line hide-details/>
                             </v-toolbar>
                         </template>
