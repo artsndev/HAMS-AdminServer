@@ -110,7 +110,6 @@ class QueuingController extends Controller
                 'success' => false,
                 'message' => 'Queue not found',
             ];
-            // Send an Email to User when Queuing is completed
             return response()->json($response, 404);
         } catch (\Exception $e) {
             $errors = [

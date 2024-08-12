@@ -98,11 +98,24 @@
                                         </v-btn>
                                     </template>
                                     <template v-slot:default="{ isActive }">
-                                        <v-card title="Remove Doctor's Profile" prepend-icon="mdi-calendar-remove">
-                                            <v-card-text>{{ item.name }}</v-card-text>
+                                        <v-card >
+                                            <v-toolbar color="primary">
+                                                <v-toolbar-title>Delete this account?</v-toolbar-title>
+                                                <v-btn icon dark @click="isActive.value = false">
+                                                    <v-icon>mdi-close</v-icon>
+                                                </v-btn>
+                                            </v-toolbar>
+                                            <v-card-text>{{ message }}</v-card-text>
+                                            <v-card-text>
+                                                <v-alert v-model="item.alert" border="start" variant="tonal" color="blue-grey-darken-1" class="text-medium-emphasis text-caption mb-2">
+                                                Note: If you will delete this account, all of his data will be removed from the system.
+                                                </v-alert>
+                                            </v-card-text>
+                                            <v-divider></v-divider>
                                             <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn size="small" class="text-capitalize" text="Close Dialog" @click="isActive.value = false"></v-btn>
+                                                <v-spacer></v-spacer>
+                                                <v-btn text="Yes" prepend-icon="mdi-check" class="text-none" color="green-darken-1" :loading="isLoading" @click="deleteItem(item.id)"></v-btn>
+                                                <v-btn text="No" prepend-icon="mdi-close" color="red-darken-1" class="text-none" @click="isActive.value = false"></v-btn>
                                             </v-card-actions>
                                         </v-card>
                                     </template>
@@ -117,6 +130,10 @@
                 </v-col>
             </v-row>
         </v-container>
+        <v-snackbar :timeout="5000" v-model="snackbar" color="success">
+            <v-icon icon="mdi-check" class="px-2"></v-icon>
+            {{ text }}
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -199,9 +216,23 @@ const viewItem = (item) => {
   // Implement view functionality here
 };
 
-const deleteItem = (item) => {
-    console.log('Delete item:', item);
-  // Implement delete functionality here
+const deleteItem = async (userId) => {
+    try {
+        isLoading.value = true;
+        const token = localStorage.getItem('adminToken');
+        const response = await axios.delete('/api/admin/user/' + userId, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        snackbar.value = true
+        text.value = 'Deleted Successfully'
+        fetchData();
+    } catch (error) {
+        console.error('Error deleting user:', error);
+    } finally {
+        isLoading.value = false;
+    }
 };
 
 const totalResults = computed(() => {
