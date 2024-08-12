@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\API\User;
 
-use App\Http\Controllers\Controller;
+use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class PostController extends Controller
 {
@@ -12,7 +13,20 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $post = Post::latest()->get();
+            $response = [
+                'success' => true,
+                'data' => $post
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $response = [
+                'success' => false,
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($response, 500);
+        }
     }
 
     /**

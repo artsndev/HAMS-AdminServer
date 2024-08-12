@@ -129,6 +129,7 @@ use App\Http\Controllers\API\User\Auth\RegisterController as UserRegisterControl
 use App\Http\Controllers\API\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\API\User\AppointmentController as UserAppointmentController;
 use App\Http\Controllers\API\User\DoctorController as UserDoctorController;
+use App\Http\Controllers\API\User\PostController as UserPostController;
 use App\Http\Controllers\API\User\Auth\LogoutController as UserLogoutController;
 
 // User Login Route
@@ -157,6 +158,10 @@ Route::middleware(['auth:user-api'])->group(function () {
         Route::get('/user/appointment', 'index');
         Route::get('/user/appointment/{id}', 'show');
         Route::post('/user/appointment', 'store');
+    });
+    // User Post Controller
+    Route::controller(UserPostController::class)->group(function () {
+        Route::get('/user/post', 'index');
     });
     // User Logout Route
     Route::controller(UserLogoutController::class)->group(function () {

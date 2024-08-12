@@ -21,8 +21,12 @@ class PostController extends Controller
                 'data' => $post
             ];
             return response()->json($response, 200);
-        } catch (\Throwable $th) {
-            //throw $th;
+        } catch (\Exception $e) {
+            $response = [
+                'success' => false,
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($response, 500);
         }
     }
 
@@ -47,7 +51,6 @@ class PostController extends Controller
                 'title' => $request->input('title'),
                 'body' => $request->input('body')
             ]);
-
             $response = [
                 'success' => true,
                 'data' => $post
