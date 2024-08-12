@@ -14,7 +14,16 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $post = Post::latest()->get();
+            $response = [
+                'success' => true,
+                'data' => $post
+            ];
+            return response()->json($response, 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 
     /**

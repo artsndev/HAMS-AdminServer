@@ -20,6 +20,7 @@ use App\Http\Controllers\API\Admin\AppointmentController as AdminAppointmentCont
 use App\Http\Controllers\API\Admin\DoctorController as AdminDoctorController;
 use App\Http\Controllers\API\Admin\UserController as AdminUserController;
 use App\Http\Controllers\API\Admin\QueueController as AdminQueuingController;
+use App\Http\Controllers\API\Admin\PostController as AdminPostController;
 use App\Http\Controllers\API\Admin\Auth\LogoutController as AdminLogoutController;
 
 // Admin Login Route
@@ -49,9 +50,14 @@ Route::middleware(['auth:admin-api'])->group(function () {
         Route::put('/admin/user/{id}', 'update');
         Route::delete('/admin/user/{id}', 'destroy');
     });
-    // Doctor Queuing Controller
+    // Admin Queuing Controller
     Route::controller(AdminQueuingController::class)->group(function () {
         Route::get('/admin/queue', 'index');
+    });
+    // Admin Post Controller
+    Route::controller(AdminPostController::class)->group(function () {
+        Route::get('/admin/post', 'index');
+        Route::post('/admin/post', 'store');
     });
     // Logout Route
     Route::controller(AdminLogoutController::class)->group(function () {
