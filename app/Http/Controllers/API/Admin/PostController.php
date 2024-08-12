@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\API\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -20,7 +22,35 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|string',
+                'body' =>  'required'
+            ]);
+            if ($validator->fails()) {
+                $response = [
+                    'success' => false,
+                    'errors' => $validator->errors(),
+                ];
+                return response()->json($response, 200);
+            }
+            $post = Post::create([
+                'title' => $request->input('title'),
+                'body' => $request->input('body')
+            ]);
+
+            $response = [
+                'success' => true,
+                'data' => $post
+            ];
+            return response()->json($response,201);
+        }  catch (\Exception $e) {
+            $response = [
+                'success' => false,
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($response, 500);
+        }
     }
 
     /**
