@@ -36,7 +36,8 @@ const number = {
     decimal: '.',
     separator: ',',
     precision: 2,
-    masked: true,
+    masked: false,
+    disabled: true,
 }
 const count_patients = ref('')
 const count_doctors = ref('')

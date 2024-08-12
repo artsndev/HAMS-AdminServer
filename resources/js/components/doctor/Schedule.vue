@@ -22,7 +22,25 @@
                                     <v-text-field rounded color="primary" variant="outlined" v-model="searchQuery"  density="compact" label="Search by Time, Date and Year at Schedule Time" single-line hide-details/>
                                 </v-toolbar>
                             </template>
-                            <template v-slot:item.schedule_time="{ item }">{{ formatDate(item.schedule_time) }}</template>
+                            <template v-slot:item.doctor.name="{ item }">{{ item.doctor.name }}</template>
+                            <template v-slot:item.doctor.email="{ item }">{{ item.doctor.email }}</template>
+                            <template v-slot:item.doctor.specialization="{ item }">{{ item.doctor.specialization }}</template>
+                            <template v-slot:item.schedule_time="{ item }">
+                                <span>
+                                    <span v-for="(part, index) in item.highlightedScheduleTime" :key="index">
+                                        <template v-if="part.startsWith('<mark>')">
+                                            <mark>{{ part.replace(/<\/?mark>/g, '') }}</mark>
+                                        </template>
+                                        <template v-else>
+                                            {{ part }}
+                                        </template>
+                                    </span>
+                                </span>
+                            </template>
+                            <template v-slot:item.deleted_at="{ item }">
+                                <v-chip color="warning" v-if="item.deleted_at">Occupied</v-chip>
+                                <v-chip color="success" v-else>Available</v-chip>
+                            </template>
                             <template v-slot:item.created_at="{ item }">{{ formatDate(item.created_at) }}</template>
                             <template v-slot:item.actions="{ item }">
                                 <!-- View Dialog -->
@@ -42,23 +60,6 @@
                                         </v-card>
                                     </template>
                                 </v-dialog>
-                                <!-- Edit Dialog -->
-                                <!-- <v-dialog v-model="item.editDialog" max-width="500" persistent>
-                                    <template v-slot:activator="{ props }">
-                                        <v-btn icon @click="editItem(item)" variant="text" color="warning" v-bind="props">
-                                            <v-icon>mdi-pencil</v-icon>
-                                        </v-btn>
-                                    </template>
-                                    <template v-slot:default="{ isActive }">
-                                        <v-card title="Edit Schedule" prepend-icon="mdi-calendar-edit">
-                                            <v-card-text>{{ formatDate(item.schedule_time) }}</v-card-text>
-                                            <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
-                                            </v-card-actions>
-                                        </v-card>
-                                    </template>
-                                </v-dialog> -->
                                 <!-- Remove Dialog -->
                                 <v-dialog v-model="item.deleteDialog" max-width="500" persistent>
                                     <template v-slot:activator="{ props }">
@@ -136,9 +137,13 @@ const pagination = ref({
 });
 
 const headers = [
+    { title: 'Name', value: 'doctor.name', align: 'center' },
+    { title: 'Email', value: 'doctor.email', align: 'center' },
+    { title: 'Specialization', value: 'doctor.specialization', align: 'center' },
     { title: 'Schedule Time', value: 'schedule_time', align: 'center' },
+    { title: 'Status', value: 'deleted_at', align: 'center' },
     { title: 'Posted Date', value: 'created_at', align: 'center' },
-    { title: 'Actions', value: 'actions', sortable: false, align: 'center' }, // Added actions column
+    { title: 'Actions', value: 'actions', sortable: false, align: 'center' },
 ];
 
 const schedule_time_error = ref('')
@@ -211,13 +216,8 @@ const fetchData = async () => {
     }
 };
 
-// const editItem = (item) => {
-//     console.log('Edit item:', item);
-// };
-
 const viewItem = (item) => {
     console.log('View item:', item);
-  // Implement view functionality here
 };
 
 const deleteItem = (item) => {
@@ -238,13 +238,27 @@ const searchQuery = ref('');
 const filteredData = computed(() => {
     if (!data.value) return [];
     const search = searchQuery.value.toLowerCase();
-    return data.value.filter(item =>
-        formatDate(item.schedule_time).toLowerCase().includes(search)
-    );
+    return data.value.filter(item => {
+            const scheduleTime = formatDate(item.schedule_time).toLowerCase();
+            return scheduleTime.includes(search);
+        }).map(item => {
+            const scheduleTime = formatDate(item.schedule_time);
+            let highlightedScheduleTime = [scheduleTime];
+            if (search) {
+                const searchRegex = new RegExp(`(${search})`, 'gi');
+                highlightedScheduleTime = scheduleTime.split(searchRegex).map(part =>
+                    searchRegex.test(part) ? `<mark>${part}</mark>` : part
+                );
+            }
+        return {
+            ...item,
+            highlightedScheduleTime
+        };
+    });
 });
 
 watch([searchQuery, pagination], () => {
-  pagination.value.page = 1; // Reset to the first page on search
+    pagination.value.page = 1;
 });
 
 onMounted(fetchData);

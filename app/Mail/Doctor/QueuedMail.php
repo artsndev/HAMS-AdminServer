@@ -20,7 +20,6 @@ class QueuedMail extends Mailable
     public function __construct(public Queue $queuing)
     {
         $this->queuing = $queuing;
-
     }
 
     /**

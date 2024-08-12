@@ -88,6 +88,7 @@ Route::middleware(['auth:doctor-api'])->group(function () {
     // Doctor Data Route
     Route::controller(DoctorDashboardController::class)->group(function () {
         Route::get('/doctor/data', 'auth');
+        Route::get('/doctor/count', 'index');
     });
     // Doctor Schedule Controller
     Route::controller(DoctorScheduleController::class)->group(function () {

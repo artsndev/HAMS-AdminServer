@@ -16,7 +16,7 @@ class ScheduleController extends Controller
     public function index()
     {
         try {
-            $schedule = Schedule::where('doctor_id', Auth::user()->id)->latest()->get();
+            $schedule = Schedule::with('doctor')->withTrashed()->where('doctor_id', Auth::user()->id)->latest()->get();
             $data = [
                 'success' => true,
                 'data' => $schedule,
