@@ -62,6 +62,14 @@ const routes = [
             requiresAdminAuth: true,
         }
     },
+    {
+        path: '/admin/announcement',
+        name: 'Admin Announcement',
+        component: () => import('../components/admin/Announcement.vue'),
+        meta: {
+            requiresAdminAuth: true,
+        }
+    },
 
     // Doctor Web Routes
     {
