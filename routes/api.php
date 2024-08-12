@@ -20,6 +20,7 @@ use App\Http\Controllers\API\Admin\AppointmentController as AdminAppointmentCont
 use App\Http\Controllers\API\Admin\DoctorController as AdminDoctorController;
 use App\Http\Controllers\API\Admin\UserController as AdminUserController;
 use App\Http\Controllers\API\Admin\QueueController as AdminQueuingController;
+use App\Http\Controllers\API\Admin\PostController as AdminPostController;
 use App\Http\Controllers\API\Admin\Auth\LogoutController as AdminLogoutController;
 
 // Admin Login Route
@@ -49,9 +50,14 @@ Route::middleware(['auth:admin-api'])->group(function () {
         Route::put('/admin/user/{id}', 'update');
         Route::delete('/admin/user/{id}', 'destroy');
     });
-    // Doctor Queuing Controller
+    // Admin Queuing Controller
     Route::controller(AdminQueuingController::class)->group(function () {
         Route::get('/admin/queue', 'index');
+    });
+    // Admin Post Controller
+    Route::controller(AdminPostController::class)->group(function () {
+        Route::get('/admin/post', 'index');
+        Route::post('/admin/post', 'store');
     });
     // Logout Route
     Route::controller(AdminLogoutController::class)->group(function () {
@@ -123,6 +129,7 @@ use App\Http\Controllers\API\User\Auth\RegisterController as UserRegisterControl
 use App\Http\Controllers\API\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\API\User\AppointmentController as UserAppointmentController;
 use App\Http\Controllers\API\User\DoctorController as UserDoctorController;
+use App\Http\Controllers\API\User\PostController as UserPostController;
 use App\Http\Controllers\API\User\Auth\LogoutController as UserLogoutController;
 
 // User Login Route
@@ -151,6 +158,10 @@ Route::middleware(['auth:user-api'])->group(function () {
         Route::get('/user/appointment', 'index');
         Route::get('/user/appointment/{id}', 'show');
         Route::post('/user/appointment', 'store');
+    });
+    // User Post Controller
+    Route::controller(UserPostController::class)->group(function () {
+        Route::get('/user/post', 'index');
     });
     // User Logout Route
     Route::controller(UserLogoutController::class)->group(function () {

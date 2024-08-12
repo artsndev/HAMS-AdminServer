@@ -6,19 +6,20 @@
                 <v-icon icon="mdi-chevron-right"></v-icon>
             </template>
         </v-breadcrumbs>
-        <v-row>
-            <v-col xl="3" cols="6" v-for="(item, index) in cardItems" :key="index">
-                <v-card elevation="2" rounded="lg">
-                    <template v-slot:title>
-                        <span class="font-weight-black" color="blue">{{ item.title }}</span>
-                    </template>
-                    <v-card-text class="py-0 mb-4">
-                        <vue-number class="fs-50" v-model="item.number" v-bind="number"></vue-number>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-        </v-row>
-        <v-row>
+        <v-container>
+            <v-row>
+                <v-col xl="3" cols="6" v-for="(item, index) in cardItems" :key="index">
+                    <v-card elevation="2" rounded="lg">
+                        <template v-slot:title>
+                            <span class="font-weight-black" color="blue">{{ item.title }}</span>
+                        </template>
+                        <v-card-text class="py-0 mb-4">
+                            <vue-number class="fs-50" v-model="item.number" v-bind="number"></vue-number>
+                        </v-card-text>
+                    </v-card>
+                </v-col>
+            </v-row>
+            <v-row>
                 <v-col cols="12">
                     <v-card elevation="2" rounded="lg">
                         <v-card-text>
@@ -136,6 +137,7 @@
                     </v-card>
                 </v-col>
             </v-row>
+        </v-container>
     </v-container>
 </template>
 

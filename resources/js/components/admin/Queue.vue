@@ -194,11 +194,6 @@ const formatDate = (dateTime) => {
     return dayjs(dateTime).format('dddd, MMMM D, YYYY hh:mm A');
 };
 
-
-const formatTime = (time) => {
-    return dayjs(time).format('LT');
-};
-
 const editItem = (item) => {
     console.log('Edit item:', item);
   // Implement edit functionality here
@@ -226,7 +221,7 @@ const filteredData = computed(() => {
 });
 
 watch([searchQuery, pagination], () => {
-  pagination.value.page = 1;
+    pagination.value.page = 1;
 });
 
 onMounted(fetchData);

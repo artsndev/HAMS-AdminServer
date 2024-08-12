@@ -130,8 +130,8 @@
                 </v-col>
             </v-row>
         </v-container>
-        <v-snackbar :timeout="5000" v-model="snackbar" color="success">
-            <v-icon icon="mdi-check" class="px-2"></v-icon>
+        <v-snackbar :timeout="5000" v-model="snackbar" :color="color">
+            <v-icon :icon="icon" class="px-2"></v-icon>
             {{ text }}
         </v-snackbar>
     </v-container>
@@ -154,6 +154,8 @@ const searchQuery = ref('');
 const isLoading = ref(false);
 const snackbar = ref(false);
 const text = ref('');
+const color = ref('');
+const icon = ref('');
 const message = ref('Are you sure to remove this account from the system?');
 
 const pagination = ref({
@@ -179,18 +181,18 @@ const fetchData = async () => {
             },
         });
         data.value = response.data.data
-        console.log(data.value)
     } catch (error) {
         console.error('Error fetching data:', error);
         if (error.response && error.response.status === 401) {
             snackbar.value = true;
             text.value = 'Error fetching your data. Please try again.';
+            color.value = 'red'
+            icon.value = 'mdi-exclamation'
             localStorage.removeItem('adminToken');
             setTimeout(() => {
                 location.reload();
             }, 3000);
         }
-
     } finally {
         isLoading.value = false;
     }
@@ -226,6 +228,8 @@ const deleteItem = async (userId) => {
             }
         });
         snackbar.value = true
+        color.value = 'success'
+        icon.value = 'mdi-check'
         text.value = 'Deleted Successfully'
         fetchData();
     } catch (error) {
