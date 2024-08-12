@@ -179,7 +179,6 @@ const fetchData = async () => {
             },
         });
         data.value = response.data.data
-        console.log(data.value)
     } catch (error) {
         console.error('Error fetching data:', error);
         if (error.response && error.response.status === 401) {
@@ -190,7 +189,6 @@ const fetchData = async () => {
                 location.reload();
             }, 3000);
         }
-
     } finally {
         isLoading.value = false;
     }
