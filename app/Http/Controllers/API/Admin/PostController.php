@@ -86,6 +86,27 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $post = Post::find($id);
+            if ($post) {
+                $post->delete();
+                $data = [
+                    'success' => true,
+                    'message' => 'Post was successfully destroyed.',
+                    'deleted_post' => $post,
+                ];
+                return response()->json($data, 202);
+            }
+            $data = [
+                'success' => false,
+                'message' => 'Posts doesn\'t  Exists',
+            ];
+            return response()->json($data, 404);
+        } catch (\Exception $e) {
+            $errors = [
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($errors, 500);
+        }
     }
 }

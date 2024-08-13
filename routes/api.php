@@ -58,6 +58,7 @@ Route::middleware(['auth:admin-api'])->group(function () {
     Route::controller(AdminPostController::class)->group(function () {
         Route::get('/admin/post', 'index');
         Route::post('/admin/post', 'store');
+        Route::delete('/admin/post/{id}', 'destroy');
     });
     // Logout Route
     Route::controller(AdminLogoutController::class)->group(function () {

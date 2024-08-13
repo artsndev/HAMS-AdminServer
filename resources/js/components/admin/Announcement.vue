@@ -11,8 +11,8 @@
         <v-container>
             <v-dialog v-model="add" max-width="550">
                 <template v-slot:activator="{ props: activatorProps }">
-                    <div class="text-end mb-8 mt-n8">
-                        <v-btn class="text-capitalize" v-bind="activatorProps" prepend-icon="mdi-plus" color="primary" rounded="lg">Add Announcement</v-btn>
+                    <div class="text-end mb-8 mt-n7">
+                        <v-btn class="text-capitalize" size="small" v-bind="activatorProps" prepend-icon="mdi-plus" color="primary" rounded="lg">Add Announcement</v-btn>
                     </div>
                 </template>
                 <template v-slot:default="{ isActive }">
@@ -34,31 +34,76 @@
                 </template>
             </v-dialog>
             <v-row>
-                <v-col xl="3" v-for="(item, index) in data" :key="index">
-                    <v-card rounded="xl" class="mb-1" elevation="5" height="150">
-                        <!-- <v-img height="150" src="https://cdn.vuetifyjs.com/images/cards/cooking.png" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" cover></v-img> -->
-                        <v-row class="mx-1 mt-1">
-                            <v-col cols="9">
-                                <v-chip  size="x-small" color="grey-darken-3 text-uppercase">Announcement</v-chip>
-                            </v-col>
-                            <v-col cols="3" class="mt-n1 text-end">
-                                <v-btn icon="mdi-trash-can-outline" density="comfortable" variant="flat"></v-btn>
-                            </v-col>
-                        </v-row>
-                        <v-list lines="one">
-                            <v-list-item class="mt-n3 mb-3">
-                                <template v-slot:default>
-                                    <v-list-item-content>
-                                        <v-list-item-title class="fs-26">{{ item.title }}</v-list-item-title>
-                                        <v-list-item-subtitle class="fs-16">{{ item.body }}</v-list-item-subtitle>
-                                    </v-list-item-content>
-                                </template>
-                            </v-list-item>
-                        </v-list>
-                    </v-card>
+                <v-col xl="3" cols="12" v-for="(item, index) in data" :key="index">
+                    <v-dialog v-model="item.viewAnnouncementDialog" width="600">
+                        <template v-slot:activator="{ props: activatorProps }">
+                            <v-card rounded="xl" class="mb-1" :ripple="false" elevation="5" height="150" v-bind="activatorProps" @click="viewDialog(item.id)">
+                                <v-row class="mx-1 mt-1">
+                                    <v-col cols="9">
+                                        <v-chip size="x-small" color="grey-darken-3" text-uppercase>Announcement</v-chip>
+                                    </v-col>
+                                    <v-col cols="3" class="mt-n1 text-end">
+                                        <v-dialog v-model="item.deleteDialog" width="500">
+                                            <template v-slot:activator="{ props: activator }">
+                                                <v-btn icon="mdi-trash-can-outline" density="comfortable" v-bind="activator" variant="flat"></v-btn>
+                                            </template>
+                                            <template v-slot:default="{ isActive }">
+                                                <v-card rounded="xl">
+                                                    <v-toolbar color="transparent">
+                                                        <v-toolbar-title>Delete this announcement?</v-toolbar-title>
+                                                        <v-btn icon dark @click="item.deleteDialog = false">
+                                                            <v-icon>mdi-close</v-icon>
+                                                        </v-btn>
+                                                    </v-toolbar>
+                                                    <v-card-text>
+                                                        Are you sure you want to delete this announcement?
+                                                    </v-card-text>
+                                                    <v-card-actions>
+                                                        <v-spacer></v-spacer>
+                                                        <v-btn text="Cancel" @click="item.deleteDialog = false"></v-btn>
+                                                        <v-btn text="Delete" :loading="isLoading" color="red" @click="deleteItem(item.id)"></v-btn>
+                                                    </v-card-actions>
+                                                </v-card>
+                                            </template>
+                                        </v-dialog>
+                                    </v-col>
+                                </v-row>
+                                <v-list lines="one">
+                                    <v-list-item class="mt-n3 mb-3">
+                                        <template v-slot:default>
+                                            <v-list-item-title class="fs-26">{{ item.title }}</v-list-item-title>
+                                            <v-list-item-subtitle class="fs-16">{{ item.body }}</v-list-item-subtitle>
+                                        </template>
+                                    </v-list-item>
+                                </v-list>
+                            </v-card>
+                        </template>
+                        <template v-slot:default="{ isActive }">
+                            <v-card >
+                                <v-toolbar color="transparent">
+                                    <v-toolbar-title>View announcement</v-toolbar-title>
+                                    <v-btn icon dark @click="isActive.value = false">
+                                        <v-icon>mdi-close</v-icon>
+                                    </v-btn>
+                                </v-toolbar>
+                                <v-card-title class="fs-26 ms-1">{{ item.title }}</v-card-title>
+                                <v-card-text>
+                                    <p class="fs-16">{{ item.body }}</p>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </template>
+                    </v-dialog>
                 </v-col>
             </v-row>
         </v-container>
+        <v-snackbar :timeout="5000" v-model="snackbar" :color="color">
+            <v-icon :icon="icon" class="px-2"></v-icon>
+            {{ text }}
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -133,6 +178,41 @@ const addAnnouncement = async () => {
         console.log(error)
     }
 }
+
+const viewAnnouncementDialog = ref(false)
+
+const viewDialog = (id) => {
+    const selectedItem = data.value.find(item => item.id === id);
+    if (selectedItem) {
+        selectedItem.viewAnnouncementDialog = true;
+    }
+}
+const isLoading = ref(false)
+const snackbar = ref(false)
+const text = ref('')
+const color = ref('')
+const icon = ref('')
+
+const deleteItem = async (postId) => {
+    try {
+        isLoading.value = true;
+        const token = localStorage.getItem('adminToken');
+        const response = await axios.delete('/api/admin/post/' + postId, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        fetchData();
+        snackbar.value = true
+        color.value = 'success'
+        icon.value = 'mdi-check'
+        text.value = 'Deleted Successfully'
+    } catch (error) {
+        console.error('Error deleting post:', error);
+    } finally {
+        isLoading.value = false;
+    }
+};
 
 onMounted(() => {
     fetchData()
