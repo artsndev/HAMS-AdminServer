@@ -107,6 +107,7 @@ Route::middleware(['auth:doctor-api'])->group(function () {
     Route::controller(DoctorScheduleController::class)->group(function () {
         Route::get('/doctor/schedule', 'index');
         Route::post('/doctor/schedule', 'store');
+        Route::delete('/doctor/schedule/{id}', 'destroy');
     });
     // Doctor Appointment Controller
     Route::controller(DoctorAppointmentController::class)->group(function () {
