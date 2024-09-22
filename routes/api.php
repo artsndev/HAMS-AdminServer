@@ -155,6 +155,7 @@ Route::middleware(['auth:user-api'])->group(function () {
     // User Data Route
     Route::controller(UserDashboardController::class)->group(function () {
         Route::get('/user/data', 'auth');
+        Route::get('/user/count', 'index');
     });
     // User Doctor Route
     Route::controller(UserDoctorController::class)->group(function () {
