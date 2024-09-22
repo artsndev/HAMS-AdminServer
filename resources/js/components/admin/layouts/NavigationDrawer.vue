@@ -32,7 +32,7 @@ const items = ref([
     { icon: 'mdi-clipboard-text-multiple-outline', text: 'Appointments', routeName: 'Admin Appointment'},
     { icon: 'mdi-doctor', text: 'Doctors', routeName: 'Admin Doctor'},
     { icon: 'mdi-account-multiple-outline', text: 'Users', routeName: 'Admin User'},
-    { icon: 'mdi-clipboard-check-multiple-outline', text: 'Queued', routeName: 'Admin Queue'},
+    { icon: 'mdi-clipboard-check-multiple-outline', text: 'Status', routeName: 'Admin Queue'},
 ]);
 
 const router = useRouter();
