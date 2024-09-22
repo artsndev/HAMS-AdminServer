@@ -23,6 +23,12 @@ use App\Http\Controllers\API\Admin\QueueController as AdminQueuingController;
 use App\Http\Controllers\API\Admin\PostController as AdminPostController;
 use App\Http\Controllers\API\Admin\Auth\LogoutController as AdminLogoutController;
 
+use App\Http\Controllers\API\Admin\PDFController as AdminPDFController;
+Route::controller(AdminPDFController::class)->group(function () {
+    Route::get('/admin/download/{id}', 'download');
+});
+
+
 // Admin Login Route
 Route::controller(AdminLoginController::class)->group(function () {
     Route::post('/admin/login', 'login');
