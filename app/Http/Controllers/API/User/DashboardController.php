@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\API\User;
 
-use App\Http\Controllers\Controller;
+use App\Models\Queue;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -22,7 +25,23 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $pending_appointments = Appointment::where('user_id', Auth::user()->id)->get()->count();
+            $processing_appointments = Appointment::onlyTrashed()->where('user_id', Auth::user()->id)->get()->count();
+            $completed_appointments = Queue::onlyTrashed()->where('user_id', Auth::user()->id)->get()->count();
+            $data = [
+                'pending_appointments' => $pending_appointments,
+                'processing_appointments' => $processing_appointments,
+                'completed_appointments' => $completed_appointments,
+            ];
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+            $response = [
+                'success' => false,
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($response, 500);
+        }
     }
 
     /**

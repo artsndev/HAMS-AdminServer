@@ -99,6 +99,27 @@ class ScheduleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $schedule = Schedule::find($id);
+            if ($schedule) {
+                $schedule->forceDelete();
+                $data = [
+                    'success' => true,
+                    'message' => 'schedule was successfully destroyed.',
+                    'deleted_schedule' => $schedule,
+                ];
+                return response()->json($data, 202);
+            }
+            $data = [
+                'success' => false,
+                'message' => 'schedules doesn\'t  Exists',
+            ];
+            return response()->json($data, 404);
+        } catch (\Exception $e) {
+            $errors = [
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($errors, 500);
+        }
     }
 }

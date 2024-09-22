@@ -107,6 +107,7 @@ Route::middleware(['auth:doctor-api'])->group(function () {
     Route::controller(DoctorScheduleController::class)->group(function () {
         Route::get('/doctor/schedule', 'index');
         Route::post('/doctor/schedule', 'store');
+        Route::delete('/doctor/schedule/{id}', 'destroy');
     });
     // Doctor Appointment Controller
     Route::controller(DoctorAppointmentController::class)->group(function () {
@@ -154,6 +155,7 @@ Route::middleware(['auth:user-api'])->group(function () {
     // User Data Route
     Route::controller(UserDashboardController::class)->group(function () {
         Route::get('/user/data', 'auth');
+        Route::get('/user/count', 'index');
     });
     // User Doctor Route
     Route::controller(UserDoctorController::class)->group(function () {

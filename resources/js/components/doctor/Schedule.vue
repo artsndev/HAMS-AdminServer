@@ -61,18 +61,26 @@
                                     </template>
                                 </v-dialog>
                                 <!-- Remove Dialog -->
-                                <v-dialog v-model="item.deleteDialog" max-width="500" persistent>
+                                <v-dialog v-if="!item.deleted_at" v-model="item.deleteDialog" max-width="500" persistent>
                                     <template v-slot:activator="{ props }">
                                         <v-btn icon @click="deleteItem(item)" variant="text" color="red-darken-3" v-bind="props">
                                             <v-icon>mdi-delete</v-icon>
                                         </v-btn>
                                     </template>
                                     <template v-slot:default="{ isActive }">
-                                        <v-card title="Remove Schedule" prepend-icon="mdi-calendar-remove">
-                                            <v-card-text>{{ formatDate(item.schedule_time) }}</v-card-text>
+                                        <v-card >
+                                            <v-toolbar color="primary">
+                                                <v-toolbar-title>Delete this schedule?</v-toolbar-title>
+                                                <v-btn icon dark @click="isActive.value = false">
+                                                    <v-icon>mdi-close</v-icon>
+                                                </v-btn>
+                                            </v-toolbar>
+                                            <v-card-text>{{ message }}</v-card-text>
+                                            <v-divider></v-divider>
                                             <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn size="small" class="text-capitalize" text="Close Dialog" @click="isActive.value = false"></v-btn>
+                                                <v-spacer></v-spacer>
+                                                <v-btn text="Yes" prepend-icon="mdi-check" class="text-none" color="green-darken-1" :loading="isLoading" @click="deleteItem(item.id)"></v-btn>
+                                                <v-btn text="No" prepend-icon="mdi-close" color="red-darken-1" class="text-none" @click="isActive.value = false"></v-btn>
                                             </v-card-actions>
                                         </v-card>
                                     </template>
@@ -129,7 +137,7 @@ const data = ref([]);
 const isLoading = ref(false);
 const snackbar = ref(false);
 const text = ref('');
-const message = ref('Are you sure to remove this account from the system?');
+const message = ref('Are you sure to remove schedule?');
 
 const pagination = ref({
     rowsPerPage: 10,
@@ -220,9 +228,23 @@ const viewItem = (item) => {
     console.log('View item:', item);
 };
 
-const deleteItem = (item) => {
-    console.log('Delete item:', item);
-  // Implement delete functionality here
+const deleteItem = async (id) => {
+    try {
+        isLoading.value = true;
+        const token = localStorage.getItem('doctorToken');
+        const response = await axios.delete('/api/doctor/schedule/' + id, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        snackbar.value = true
+        text.value = 'Deleted Successfully'
+        fetchData();
+    } catch (error) {
+        console.error('Error deleting user:', error);
+    } finally {
+        isLoading.value = false;
+    }
 };
 
 const totalResults = computed(() => {
