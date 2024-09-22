@@ -30,7 +30,7 @@ const items = ref([
     { icon: 'mdi-chart-donut', text: 'Dashboard', routeName: 'Doctor Dashboard' },
     { icon: 'mdi-clipboard-text-clock-outline', text: 'Appointments', routeName: 'Doctor Appointment'},
     { icon: 'mdi-calendar-multiple', text: 'Schedule', routeName: 'Doctor Schedule'},
-    { icon: 'mdi-clipboard-check-multiple-outline', text: 'Queued', routeName: 'Doctor Queue'},
+    { icon: 'mdi-clipboard-check-multiple-outline', text: 'Status', routeName: 'Doctor Queue'},
 ]);
 
 const router = useRouter();

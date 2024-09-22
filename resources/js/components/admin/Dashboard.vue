@@ -37,8 +37,8 @@
                             <template v-slot:item.user.name="{ item }">{{ item.user.name }}</template>
                             <template v-slot:item.user.email="{ item }">{{ item.user.email }}</template>
                             <template v-slot:item.deleted_at="{ item }">
-                                <v-chip color="success" v-if="item.deleted_at">Queued</v-chip>
-                                <v-chip color="warning" v-else>On Queue</v-chip>
+                                <v-chip color="success" v-if="item.deleted_at">Completed</v-chip>
+                                <v-chip color="warning" v-else>Proccessing</v-chip>
                             </template>
                             <template v-slot:item.created_at="{ item }">{{ formatDate(item.created_at) }}</template>
                             <template v-slot:item.actions="{ item }">

@@ -147,7 +147,7 @@ const count_queued_appointments = ref('')
 const cardItems = ref([
     { title: 'Available Schedule', number: count_schedule },
     { title: 'Pending Appointments', number: count_pending_appointments },
-    { title: 'On Queue Appointments', number: count_queue_appointments },
+    { title: 'Processed Appointmects', number: count_queue_appointments },
     { title: 'Completed Appointments', number: count_queued_appointments },
 ])
 
